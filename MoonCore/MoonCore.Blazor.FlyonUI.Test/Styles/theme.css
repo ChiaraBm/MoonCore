@@ -1,0 +1,44 @@
+@plugin "flyonui/theme" {
+    name: "moonlight";
+    default: true; /* Set as default theme */
+    prefersdark: false; /* Set dark mode for prefers-color-scheme: dark */
+    color-scheme: light; /* Defines the color of browser UI */
+
+    --color-base-100: rgb(28, 36, 56);              /* gray-800 */
+    --color-base-200: rgb(17, 23, 33);              /* gray-900 */
+    --color-base-300: rgb(14, 18, 28);              /* gray-950 */
+    --color-base-content: rgb(255, 255, 255);       /* gray-100 */
+
+    --color-primary: rgb(99, 102, 241);             /* primary-500 */
+    --color-primary-content: var(--color-base-content);
+
+    --color-secondary: rgb(153, 161, 183);          /* secondary-500 */
+    --color-secondary-content: var(--color-base-content);     /* secondary-950 */
+
+    --color-accent: rgb(139, 92, 246);              /* tertiary-500 */
+    --color-accent-content: var(--color-base-content);       /* tertiary-950 */
+
+    --color-neutral: rgb(28, 36, 56);               /* gray-800 */
+    --color-neutral-content: rgb(249, 249, 249);    /* gray-100 */
+
+    --color-info: rgb(59, 130, 246);                /* info-500 */
+    --color-info-content: var(--color-base-content);          /* info-950 */
+
+    --color-success: rgb(34, 197, 94);              /* success-500 */
+    --color-success-content: var(--color-base-content);        /* success-950 */
+
+    --color-warning: rgb(234, 179, 8);              /* warning-500 */
+    --color-warning-content: var(--color-base-content);        /* warning-950 */
+
+    --color-error: rgb(239, 68, 68);                /* danger-500 */
+    --color-error-content: var(--color-base-content);         /* danger-950 */
+
+    --radius-selector: 1rem;
+    --radius-field: 0.5rem;
+    --radius-box: 1rem;
+    --size-selector: 0.25rem;
+    --size-field: 0.25rem;
+    --border: 1px;
+    --depth: 0;
+    --noise: 0;
+}

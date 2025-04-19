@@ -1,0 +1,24 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=fallback');
+@import url('https://cdn.jsdelivr.net/npm/lucide-static/font/lucide.css');
+
+@import "tailwindcss";
+@import "./node_modules/flyonui/variants.css";
+
+@import "./theme.css";
+
+@plugin "flyonui" {
+    themes: soft, moonlight;
+}
+
+@source "../../MoonCore.Blazor.FlyonUI/**/*.razor";
+@source "../**/*.razor";
+@source "./node_modules/flyonui/dist/index.js";
+@source "./node_modules/flyonui/dist/accordion.js";
+
+@theme {
+    --font-inter: Inter, var(--font-sans);
+}
+
+#blazor-error-ui {
+    display: none;
+}

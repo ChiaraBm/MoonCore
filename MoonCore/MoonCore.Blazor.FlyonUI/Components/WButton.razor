@@ -1,0 +1,54 @@
+@if (IsWorking)
+{
+    <button type="button" class="@CssClasses" disabled="disabled">
+        <span class="loading loading-spinner loading-sm"></span>
+        @if (!string.IsNullOrEmpty(Text))
+        {
+            <span class="me-2">@Text</span>
+        }
+    </button>
+}
+else
+{
+    <button type="button" class="@CssClasses" @onclick="Work">
+        @ChildContent
+    </button>
+}
+
+@code
+{
+    [Parameter] public string CssClasses { get; set; } = "btn btn-primary";
+    [Parameter] public RenderFragment ChildContent { get; set; }
+    [Parameter] public Func<WButton, Task> OnClick { get; set; }
+
+    private bool IsWorking = false;
+    private string? Text;
+
+    private async Task Work()
+    {
+        IsWorking = true;
+        Text = "";
+        await InvokeAsync(StateHasChanged);
+
+        try
+        {
+            await OnClick.Invoke(this);
+            
+            IsWorking = false;
+            await InvokeAsync(StateHasChanged);
+        }
+        catch (Exception)
+        {
+            IsWorking = false;
+            await InvokeAsync(StateHasChanged);
+            
+            throw;
+        }
+    }
+
+    public async Task UpdateLoadingText(string? value)
+    {
+        Text = value;
+        await InvokeAsync(StateHasChanged);
+    }
+}

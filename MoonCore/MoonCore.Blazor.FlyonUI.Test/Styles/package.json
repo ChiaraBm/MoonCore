@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "@tailwindcss/cli": "^4.1.4",
+    "flyonui": "^2.1.0",
+    "tailwindcss": "^4.1.4"
+  },
+  "type": "module"
+}
