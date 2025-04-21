@@ -6,7 +6,19 @@
   <Accordion>
     <AccordionItem>
       <Header>
-        When is payment taken for my order? 1
+        <div class="text-base-content shrink-0">
+          @if (context)
+          {
+            <i class="icon-plus align-middle"></i>
+          }
+          else
+          {
+            <i class="icon-minus align-middle"></i>
+          }
+        </div>
+        <div>
+          When is payment taken for my order? 1
+        </div>
       </Header>
       <Body>
       <div class="px-5 pb-4">

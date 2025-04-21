@@ -1,13 +1,14 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=fallback');
-@import url('https://cdn.jsdelivr.net/npm/lucide-static/font/lucide.css');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=fallback') layer;
+@import url('https://cdn.jsdelivr.net/npm/lucide-static/font/lucide.css') layer;
 
 @import "tailwindcss";
 @import "./node_modules/flyonui/variants.css";
 
 @import "./theme.css";
+@import "./theme.light.css";
 
 @plugin "flyonui" {
-    themes: soft, moonlight;
+    themes: daylight, moonlight;
 }
 
 @source "../../MoonCore.Blazor.FlyonUI/**/*.razor";

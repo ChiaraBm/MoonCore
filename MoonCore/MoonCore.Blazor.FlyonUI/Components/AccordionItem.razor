@@ -1,6 +1,6 @@
 @code
 {
-    [Parameter] public RenderFragment Header { get; set; }
+    [Parameter] public RenderFragment<bool> Header { get; set; }
     [Parameter] public RenderFragment Body { get; set; }
     [CascadingParameter] public Accordion Accordion { get; set; }
 

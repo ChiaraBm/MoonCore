@@ -5,40 +5,51 @@
 
 <div class="mt-5 flex justify-center">
 
-    <div class="gap-5 grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4">
-        <div class="card card-body">
-            <div class="flex justify-between"><p class="text-xl">0%</p>
-                <span class="text-4xl text-primary">
-                    <i class="icon-cpu"></i>
-                </span>
+    <div class="gap-5 w-full grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4">
+        <div class="col-span-1 stats">
+            <div class="stat">
+                <div class="stat-figure">
+                    <i class="icon-cpu text-3xl text-primary"></i>
+                </div>
+                <div class="stat-title">CPU Usage</div>
+                <div class="stat-value truncate">1,5%</div>
             </div>
-            <p class="text-base text-base-content/50">CPU Usage</p></div>
+        </div>
 
-        <div class="card card-body">
-            <div class="flex justify-between"><p class="text-xl">634.84 MB</p>
-                <span class="text-4xl text-primary">
-                    <i class="icon-memory-stick"></i>
-                </span>
+        <div class="col-span-1 stats">
+            <div class="stat">
+                <div class="stat-figure">
+                    <i class="icon-memory-stick text-3xl text-primary"></i>
+                </div>
+                <div class="stat-title">Memory Usage</div>
+                <div class="stat-value truncate">635.52 MB</div>
             </div>
-            <p class="text-base text-base-content/50">Memory Usage</p></div>
+        </div>
 
-        <div class="card card-body">
-            <div class="flex justify-between"><p class="text-xl">Ubuntu 24.04.2 LTS</p>
-                <span class="text-4xl text-primary">
-                    <i class="icon-server-cog"></i>
-                </span>
+        <div class="col-span-1 stats">
+            <div class="stat">
+                <div class="stat-figure">
+                    <i class="icon-server-cog  text-3xl text-primary"></i>
+                </div>
+                <div class="stat-title">Running on</div>
+                <div class="stat-value truncate">
+                    Ubuntu
+                </div>
             </div>
-            <p class="text-base text-base-content/50">Host OS</p></div>
+        </div>
 
-        <div class="card card-body">
-            <div class="flex justify-between"><p class="text-xl">3d 0h 36m 14s</p>
-                <span class="text-4xl text-primary">
-                    <i class="icon-clock"></i>
-                </span></div>
-            <p class="text-base text-base-content/50">Uptime</p></div>
+        <div class="col-span-1 stats">
+            <div class="stat">
+                <div class="stat-figure">
+                    <i class="icon-clock  text-3xl text-primary"></i>
+                </div>
+                <div class="stat-title">Uptime</div>
+                <div class="stat-value truncate">5d 18h 27m</div>
+            </div>
+        </div>
 
-        <div class="card card-body">
-            <div class="flex justify-center">
+        <div class="col-span-1 card card-body">
+            <div class="flex justify-center items-center">
                 <WButton OnClick="Restart" CssClasses="btn btn-error w-full">
                     <i class="icon-repeat text-xl text-white me-2"></i>
                     Restart/Shutdown
@@ -54,13 +65,13 @@
     {
         await button.UpdateLoadingText("Notifying plugins");
         await Task.Delay(TimeSpan.FromSeconds(1));
-        
+
         await button.UpdateLoadingText("Stopping services");
         await Task.Delay(TimeSpan.FromSeconds(1));
-        
+
         await button.UpdateLoadingText("Waiting for startup");
         await Task.Delay(TimeSpan.FromSeconds(5));
-        
+
         await button.UpdateLoadingText("Starting services");
         await Task.Delay(TimeSpan.FromSeconds(1));
     }

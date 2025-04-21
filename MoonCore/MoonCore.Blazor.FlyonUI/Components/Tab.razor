@@ -1,0 +1,12 @@
+@code
+{
+    [Parameter] public RenderFragment ChildContent { get; set; }
+    [Parameter] public RenderFragment<bool> Header { get; set; }
+    [Parameter] public string? Title { get; set; }
+    [CascadingParameter] public Tabs Tabs { get; set; }
+
+    protected override void OnInitialized()
+    {
+        Tabs.AddTab(this);
+    }
+}

@@ -1,0 +1,54 @@
+<CascadingValue TValue="Tabs" IsFixed="true" Value="@this">
+    @ChildContent
+</CascadingValue>
+
+<nav class="@HeaderCss" aria-label="Tabs" role="tablist" aria-orientation="horizontal">
+    @foreach (var tab in Items)
+    {
+        var isActive = CurrentTab == tab;
+
+        <button @onclick="() => Select(tab)" type="button" class="@HeaderTabCss @(isActive  ? "active" : "")" data-tab="" role="tab" aria-selected="@(isActive ? "true" : "false")">
+            @if (string.IsNullOrEmpty(tab.Title))
+            {
+                @tab.Header
+            }
+            else
+            {
+                <span>@tab.Title</span>
+            }
+        </button>
+    }
+</nav>
+
+@if (CurrentTab != null)
+{
+    @CurrentTab.ChildContent
+}
+
+@code
+{
+    [Parameter] public RenderFragment ChildContent { get; set; }
+    [Parameter] public string HeaderCss { get; set; } = "tabs bg-base-200 rounded-field w-fit space-x-1 overflow-x-auto p-1 mb-3";
+    [Parameter] public string HeaderTabCss { get; set; } = "btn btn-text active-tab:bg-primary active-tab:text-white hover:text-primary hover:bg-transparent";
+
+    private readonly List<Tab> Items = new();
+    private Tab? CurrentTab;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender)
+            return;
+
+        CurrentTab = Items.FirstOrDefault();
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private async Task Select(Tab tab)
+    {
+        CurrentTab = tab;
+        await InvokeAsync(StateHasChanged);
+    }
+
+    public void AddTab(Tab tab)
+        => Items.Add(tab);
+}

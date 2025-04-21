@@ -5,15 +5,19 @@
 <div class="accordion divide-neutral/20 divide-y">
   @foreach (var item in Items)
   {
-    <div class="accordion-item @(SelectedItem == item ? "active" : "")">
-      <button @onclick="() => Select(item)" class="accordion-toggle inline-flex items-center gap-x-4 text-start"
+    var isActive = SelectedItem == item;
+
+    <div class="accordion-item @(isActive ? "active" : "")">
+      <button @onclick="() => Select(item)" class="accordion-toggle inline-flex items-center gap-x-4 text-start items-center"
               aria-expanded="true">
-        @item.Header
+        @item.Header.Invoke(isActive)
       </button>
-      <div class="accordion-content w-full overflow-hidden transition-[height] duration-300"
-           role="region"
-           style="height: @(SelectedItem == item ? (InTransition ? "64px" : "fit-content") : (InTransition ? "64px" : "0px"))">
-        @item.Body
+      <div
+        class="grid overflow-hidden transition-all duration-300 ease-in-out @(isActive ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0")"
+        role="region">
+        <div class="overflow-hidden">
+          @item.Body
+        </div>
       </div>
     </div>
   }
@@ -25,7 +29,7 @@
 
   private readonly List<AccordionItem> Items = new();
   private AccordionItem? SelectedItem;
-  
+
   private bool InTransition = false;
 
   protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -40,9 +44,9 @@
   private async Task Select(AccordionItem item)
   {
     if (SelectedItem == item)
-      SelectedItem = null;
+      SelectedItem = null; // Unselect if clicked on the current item
     else
-      SelectedItem = item;
+      SelectedItem = item; // Select the citem
 
     InTransition = true;
     await InvokeAsync(StateHasChanged);
