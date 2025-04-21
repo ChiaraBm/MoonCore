@@ -1,0 +1,63 @@
+<CascadingValue TValue="Accordion" IsFixed="true" Value="@this">
+  @ChildContent
+</CascadingValue>
+
+<div class="accordion divide-neutral/20 divide-y">
+  @foreach (var item in Items)
+  {
+    <div class="accordion-item @(SelectedItem == item ? "active" : "")">
+      <button @onclick="() => Select(item)" class="accordion-toggle inline-flex items-center gap-x-4 text-start"
+              aria-expanded="true">
+        @item.Header
+      </button>
+      <div class="accordion-content w-full overflow-hidden transition-[height] duration-300"
+           role="region"
+           style="height: @(SelectedItem == item ? (InTransition ? "64px" : "fit-content") : (InTransition ? "64px" : "0px"))">
+        @item.Body
+      </div>
+    </div>
+  }
+</div>
+
+@code
+{
+  [Parameter] public RenderFragment ChildContent { get; set; }
+
+  private readonly List<AccordionItem> Items = new();
+  private AccordionItem? SelectedItem;
+  
+  private bool InTransition = false;
+
+  protected override async Task OnAfterRenderAsync(bool firstRender)
+  {
+    if (!firstRender)
+      return;
+
+    SelectedItem = Items.FirstOrDefault();
+    await InvokeAsync(StateHasChanged);
+  }
+
+  private async Task Select(AccordionItem item)
+  {
+    if (SelectedItem == item)
+      SelectedItem = null;
+    else
+      SelectedItem = item;
+
+    InTransition = true;
+    await InvokeAsync(StateHasChanged);
+
+    Task.Run(async () =>
+    {
+      await Task.Delay(TimeSpan.FromMilliseconds(500));
+
+      InTransition = false;
+      await InvokeAsync(StateHasChanged);
+    });
+  }
+
+  public void AddItem(AccordionItem item)
+  {
+    Items.Add(item);
+  }
+}
