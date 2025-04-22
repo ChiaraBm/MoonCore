@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" class="bg-base-300">
+
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>MoonCore.Blazor.FlyonUI.Test</title>
+    <base href="/"/>
+    <link rel="stylesheet" href="style.min.css"/>
+</head>
+
+<body>
+
+<div id="blazor-error-ui" aria-live="assertive" class="pointer-events-none fixed inset-0 z-50 flex px-4 py-6 sm:p-6 place-content-end">
+    <div class="pointer-events-auto w-full overflow-hidden alert alert-error flex items-center py-2 px-4">
+        <i class="text-lg icon-triangle-alert me-3"></i>
+        An unhanded error occured and the application cannot continue to execute. Please reload the page
+    </div>
+</div>
+
+<div id="app">
+
+    <div class="flex h-screen justify-center items-center">
+        <div class="sm:max-w-lg">
+            <div id="blazor-loader-label" class="text-center mb-2 text-lg font-semibold"></div>
+            <div class="flex flex-col gap-1">
+                <div class="progress h-4 min-w-sm md:min-w-md" role="progressbar">
+                    <div id="blazor-loader-progress" class="progress-bar progress-primary progress-animated"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+</div>
+
+<script src="_framework/blazor.webassembly.js"></script>
+</body>
+
+</html>

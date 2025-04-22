@@ -1,0 +1,59 @@
+﻿<div class="dropdown relative inline-flex @(IsOpen ? "open" : "") @Css">
+    <button @onclick="Toggle"
+            @onfocusout="() => SetOpen(false)"
+            @ref="Button"
+            type="button"
+            class="dropdown-toggle @HeaderCss"
+            aria-haspopup="menu"
+            aria-expanded="true"
+            aria-label="Dropdown">
+        @if (string.IsNullOrEmpty(Title))
+        {
+            @Header
+        }
+        else
+        {
+            <div class="flex items-center">
+                <span class="me-1">@Title</span>
+                <i class="icon-chevron-down"></i>
+            </div>
+        }
+    </button>
+    @if (IsOpen)
+    {
+        <ul class="dropdown-menu dropdown-open:opacity-100 absolute top-10 z-10 mt-2 w-56 origin-top-right @BodyCss" role="menu" aria-orientation="vertical"
+            aria-labelledby="dropdown-default"
+            data-placement="bottom-start">
+            @ChildContent
+        </ul>
+    }
+</div>
+
+
+@code
+{
+    [Parameter] public string? Title { get; set; }
+    [Parameter] public RenderFragment<bool> Header { get; set; }
+    [Parameter] public string HeaderCss { get; set; } = "btn btn-primary";
+    [Parameter] public string BodyCss { get; set; } = "";
+    [Parameter] public string Css { get; set; } = "";
+    [Parameter] public RenderFragment ChildContent { get; set; }
+
+    private bool IsOpen = false;
+    private ElementReference Button;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (IsOpen)
+            await Button.FocusAsync();
+    }
+
+    private async Task Toggle()
+     => await SetOpen(!IsOpen);
+
+    private async Task SetOpen(bool b)
+    {
+        IsOpen = b;
+        await InvokeAsync(StateHasChanged);
+    }
+}

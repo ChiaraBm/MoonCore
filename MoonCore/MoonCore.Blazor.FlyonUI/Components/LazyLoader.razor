@@ -1,0 +1,89 @@
+﻿@using MoonCore.Exceptions
+
+@if (IsLoading)
+{
+    <div class="@(EnableDefaultSpacing ? "mt-5" : "")">
+        <div class="text-center">
+            <div class="mb-3">
+                <span class="loading loading-ring loading-xl"></span>
+            </div>
+            @if (!string.IsNullOrEmpty(Text))
+            {
+                <p class="font-normal text-lg text-base-content">
+                    @Text
+                </p>
+            }
+        </div>
+    </div>
+}
+else
+{
+    if (Exception == null)
+    {
+        @ChildContent
+    }
+    else
+    {
+        <div class="@(EnableDefaultSpacing ? "mt-5" : "")">
+            <ErrorStateDisplay Exception="Exception"/>
+        </div>
+    }
+}
+
+@code
+{
+    [Parameter] public bool HandleExceptions { get; set; } = true;
+    [Parameter] public RenderFragment ChildContent { get; set; }
+    [Parameter] public Func<LazyLoader, Task> Load { get; set; }
+    [Parameter] public bool EnableDefaultSpacing { get; set; } = true;
+    
+    private string? Text;
+    private Exception? Exception;
+    private bool IsLoading = true;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if(!firstRender)
+            return;
+
+        await Work();
+    }
+
+    private async Task Work()
+    {
+        // Reset state
+        Text = null;
+        Exception = null;
+        IsLoading = true;
+
+        await InvokeAsync(StateHasChanged);
+
+        try
+        {
+            await Load.Invoke(this);
+        }
+        catch (Exception e)
+        {
+            if (!HandleExceptions)
+                throw;
+            
+            // We don't want to handle auth issues at all
+            if (e is HttpApiException apiException && apiException.Status == 401)
+                throw;
+
+            Exception = e;
+        }
+
+        IsLoading = false;
+        await InvokeAsync(StateHasChanged);
+    }
+    
+    public async Task UpdateText(string text)
+    {
+        Text = text;
+        await InvokeAsync(StateHasChanged);
+    }
+
+    public async Task Reload()
+     => await Work();
+}

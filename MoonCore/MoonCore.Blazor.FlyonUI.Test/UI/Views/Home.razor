@@ -56,6 +56,14 @@
                 </WButton>
             </div>
         </div>
+        
+        <div class="col-span-1 card card-body">
+            <div class="flex justify-center items-center">
+                <WButton OnClick="Test" CssClasses="btn btn-primary w-full">
+                    Test
+                </WButton>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -74,5 +82,10 @@
 
         await button.UpdateLoadingText("Starting services");
         await Task.Delay(TimeSpan.FromSeconds(1));
+    }
+
+    private async Task Test(WButton _)
+    {
+        throw new Exception("AAAAAA");
     }
 }

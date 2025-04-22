@@ -12,11 +12,21 @@
     </ItemGroup>
 
     <ItemGroup>
+        <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="8.0.15" />
         <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="8.0.15"/>
     </ItemGroup>
 
     <ItemGroup>
       <Folder Include="wwwroot\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\MoonCore.Blazor\MoonCore.Blazor.csproj" />
+      <ProjectReference Include="..\MoonCore\MoonCore.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <AdditionalFiles Include="Auth\DefaultLoginTemplate.razor" />
     </ItemGroup>
 
 </Project>

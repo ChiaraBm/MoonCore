@@ -1,0 +1,20 @@
+﻿<nav class="@HeaderCss" aria-label="Tabs" role="tablist" aria-orientation="horizontal">
+    @for (var i = 0; i < Names.Length; i++)
+    {
+        var isActive = Index == i;
+        
+        <a href="@(Links[i])" class="@HeaderTabCss @(isActive ? "active" : "")" data-tab="" role="tab" aria-selected="@(isActive ? "true" : "false")">
+            @Names[i]
+        </a>
+    }
+</nav>
+
+@code
+{
+    [Parameter] public string HeaderCss { get; set; } = "tabs bg-base-100/60 rounded-field w-fit space-x-1 overflow-x-auto p-1";
+    [Parameter] public string HeaderTabCss { get; set; } = "btn btn-text text-base-content/80 active-tab:bg-primary active-tab:text-white hover:text-primary hover:bg-transparent";
+    
+    [Parameter] public string[] Names { get; set; } = [];
+    [Parameter] public string[] Links { get; set; } = [];
+    [Parameter] public int Index { get; set; }
+}
