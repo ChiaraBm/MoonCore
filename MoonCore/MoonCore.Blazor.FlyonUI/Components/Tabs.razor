@@ -28,8 +28,8 @@
 @code
 {
     [Parameter] public RenderFragment ChildContent { get; set; }
-    [Parameter] public string HeaderCss { get; set; } = "tabs bg-base-200 rounded-field w-fit space-x-1 overflow-x-auto p-1 mb-3";
-    [Parameter] public string HeaderTabCss { get; set; } = "btn btn-text active-tab:bg-primary active-tab:text-white hover:text-primary hover:bg-transparent";
+    [Parameter] public string HeaderCss { get; set; } = "tabs bg-base-100/60 rounded-field w-fit space-x-1 overflow-x-auto p-1 mb-3";
+    [Parameter] public string HeaderTabCss { get; set; } = "btn btn-text text-base-content/80 active-tab:bg-primary active-tab:text-white hover:text-primary hover:bg-transparent";
 
     private readonly List<Tab> Items = new();
     private Tab? CurrentTab;
