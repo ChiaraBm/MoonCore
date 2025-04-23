@@ -12,8 +12,10 @@
 }
 
 @source "../../MoonCore.Blazor.FlyonUI/**/*.razor";
+@source "../../MoonCore.Blazor.FlyonUI/**/*.cs";
 @source "../**/*.razor";
 @source "../**/*.html";
+@source "../**/*.cs";
 @source "./node_modules/flyonui/dist/index.js";
 @source "./node_modules/flyonui/dist/accordion.js";
 

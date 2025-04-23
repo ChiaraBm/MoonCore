@@ -19,7 +19,8 @@ public class ExampleAuthStateManager : AuthenticationStateManager
         AuthenticationState authState;
 
         var random = new Random();
-        var loggedIn = random.Next(0, 2) == 1;
+        //var loggedIn = random.Next(0, 2) == 1;
+        var loggedIn = true;
         
         if (loggedIn)
         {
@@ -44,14 +45,14 @@ public class ExampleAuthStateManager : AuthenticationStateManager
             );
         }
 
-        await Task.Delay(TimeSpan.FromSeconds(3));
+        //await Task.Delay(TimeSpan.FromSeconds(1));
 
         return authState;
     }
 
     public override async Task Login()
     {
-        await Task.Delay(3000);
+        await Task.Delay(1000);
         Navigation.NavigateTo(Navigation.Uri, true);
     }
 

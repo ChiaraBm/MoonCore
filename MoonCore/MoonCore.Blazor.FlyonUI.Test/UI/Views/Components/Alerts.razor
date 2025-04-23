@@ -1,0 +1,34 @@
+﻿@page "/components/alerts"
+
+@using MoonCore.Blazor.FlyonUI.Alerts
+@using MoonCore.Blazor.FlyonUI.Components
+
+@inject AlertService AlertService
+
+<NavTabs Index="1" Names="UiConstants.ComponentsNames" Links="UiConstants.ComponentsLinks" />
+
+<div class="my-5">
+    <PageHeader Title="Alerts">
+        <button @onclick="SuccessTest" class="btn btn-success">Success</button>
+    </PageHeader>
+</div>
+
+<button @onclick="SuccessTest" class="btn btn-success">Success</button>
+<button @onclick="InfoTest" class="btn btn-info">Info</button>
+<button @onclick="WarningTest" class="btn btn-warning">Warning</button>
+<button @onclick="ErrorTest" class="btn btn-error">Error</button>
+
+@code
+{
+    private async Task SuccessTest()
+        => await AlertService.Success("Successfully failed", "You successfully failed your parents");
+    
+    private async Task InfoTest()
+        => await AlertService.Info("Important information", "I know where your house lives. I know where your bed sleeps. I am inside your walls.");
+    
+    private async Task WarningTest()
+        => await AlertService.Warning("Serious Warning", "PHP sucks and NodeJS on the server is a mistake");
+    
+    private async Task ErrorTest()
+        => await AlertService.Error("Unknown Error", "Even we dont know what the fuck went wrong");
+}

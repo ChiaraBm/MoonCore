@@ -1,4 +1,5 @@
-﻿@inherits LayoutComponentBase
+﻿@using MoonCore.Blazor.FlyonUI.Modals
+@inherits LayoutComponentBase
 
 <div class="relative isolate flex min-h-svh w-full max-lg:flex-col bg-base-300">
     <AppSidebar Layout="this"/>
@@ -13,6 +14,8 @@
             </div>
         </div>
     </main>
+    
+    <ModalLauncher />
 </div>
 
 @code

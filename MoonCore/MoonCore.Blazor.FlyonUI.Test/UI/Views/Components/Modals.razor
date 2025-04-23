@@ -1,0 +1,19 @@
+﻿@page "/components/modals"
+
+@using MoonCore.Blazor.FlyonUI.Modals
+@using MoonCore.Blazor.FlyonUI.Test.UI.Modals
+@using MoonCore.Blazor.FlyonUI.Components
+
+@inject ModalService ModalService
+
+<div class="mb-5">
+    <NavTabs Index="4" Names="UiConstants.ComponentsNames" Links="UiConstants.ComponentsLinks" />
+</div>
+
+<button @onclick="ShowModal" class="btn btn-primary">Show modal</button>
+
+@code
+{
+    private async Task ShowModal()
+        => await ModalService.Launch<DemoModal>(size: "modal-dialog-xl");
+}

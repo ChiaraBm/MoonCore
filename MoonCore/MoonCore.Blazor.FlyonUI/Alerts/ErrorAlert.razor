@@ -1,0 +1,20 @@
+﻿@inherits MoonCore.Blazor.FlyonUI.Modals.BaseModal
+
+<div class="modal-header flex justify-center mt-3 pb-2">
+    <div class="flex flex-col text-center">
+        <i class="icon-circle-x text-3xl text-error"></i>
+        <h3 class="modal-title mt-2">@Title</h3>
+    </div>
+</div>
+<div class="modal-body flex justify-center text-lg text-center">
+    @Text
+</div>
+<div class="modal-footer">
+    <button @onclick="Hide" type="button" class="btn btn-soft btn-secondary">Close</button>
+</div>
+
+@code
+{
+    [Parameter] public string Title { get; set; }
+    [Parameter] public string Text { get; set; }
+}

@@ -1,0 +1,8 @@
+﻿@code
+{
+    [Parameter] public ModalLauncher Launcher { get; set; }
+    [Parameter] public ModalItem ModalItem { get; set; }
+
+    protected async Task Hide()
+     => await Launcher.Close(ModalItem);
+}

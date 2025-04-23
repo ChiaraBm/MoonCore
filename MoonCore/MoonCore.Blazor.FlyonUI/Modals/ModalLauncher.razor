@@ -1,0 +1,89 @@
+﻿@using MoonCore.Helpers
+
+@inject ModalService ModalService
+
+@if (Modals.Count > 0)
+{
+    <div @onclick="TriggerUnfocusHide"
+         style="z-index: 30;"
+         class="overlay-backdrop transition duration-300 fixed inset-0 bg-base-300/60 overflow-y-auto">
+    </div>
+    
+    @foreach (var modal in Modals)
+    {
+        <div class="overlay modal duration-30 modal-middle transition-opacity @(modal.IsVisible ? "open opacity-100" : "opacity-0 pointer-events-none")" role="dialog" tabindex="-1">
+            <div class="modal-dialog overlay-open:opacity-100 overlay-open:duration-30 @modal.Size">
+                <div class="modal-content">
+                    @modal.Component
+                </div>
+            </div>
+        </div>
+    }
+}
+
+@* class="modal-dialog-sm modal-dialog-lg modal-dialog-xl" *@
+
+@code
+{
+    private readonly List<ModalItem> Modals = new();
+
+    protected override void OnInitialized()
+    {
+        ModalService.UpdateLauncher(this);
+    }
+
+    private async Task TriggerUnfocusHide()
+    {
+        var modal = Modals.LastOrDefault();
+        
+        if(modal == null)
+            return;
+        
+        if(!modal.AllowUnfocusHide)
+            return;
+
+        await Close(modal);
+    }
+    
+    public async Task<ModalItem> Launch<T>(Action<Dictionary<string, object>>? onConfigure = null, string size = "modal-dialog-lg", bool allowUnfocusHide = false, bool animate = true) where T : BaseModal
+    {
+        var item = new ModalItem()
+        {
+            Size = size,
+            AllowUnfocusHide = allowUnfocusHide,
+            IsVisible = !animate
+        };
+        
+        item.Component = ComponentHelper.FromType<T>(parameters =>
+        {
+            parameters.Add("ModalItem", item);
+            parameters.Add("Launcher", this);
+            
+            if(onConfigure != null)
+                onConfigure.Invoke(parameters);
+        });
+        
+        Modals.Add(item);
+
+        await InvokeAsync(StateHasChanged);
+
+        if (animate) // We want to change the visibility after rendering to trigger the tailwind animation
+        {
+            Task.Run(async () =>
+            {
+                await Task.Delay(10);
+            
+                item.IsVisible = true;
+                await InvokeAsync(StateHasChanged);
+            });
+        }
+
+        return item;
+    }
+
+    public async Task Close(ModalItem item)
+    {
+        Modals.Remove(item);
+        await InvokeAsync(StateHasChanged);
+    }
+}

@@ -1,0 +1,34 @@
+﻿@page "/datatabels"
+@using Bogus
+@using MoonCore.Blazor.FlyonUI.Dt
+@using MoonCore.Blazor.FlyonUI.Test.Models
+
+<DataTable TItem="DataModel" ItemSource="Load">
+    <Configuration>
+        <DataTableColumn TItem="DataModel" Field="@(x => x.Id)" Name="Id" />
+        <DataTableColumn TItem="DataModel" Field="@(x => x.Name)" Name="Name" />
+        <DataTableColumn TItem="DataModel" Field="@(x => x.Email)" Name="Email" />
+    </Configuration>
+</DataTable>
+
+@code
+{
+    private DataModel[] Models;
+
+    protected override void OnInitialized()
+    {
+        var faker = new Faker<DataModel>()
+            .RuleFor(x => x.Id, x => x.UniqueIndex)
+            .RuleFor(x => x.Email, x => x.Person.Email)
+            .RuleFor(x => x.Name, x => x.Person.UserName);
+
+        Models = faker
+            .Generate(25)
+            .ToArray();
+    }
+
+    private Task<DataModel[]> Load()
+    {
+        return Task.FromResult(Models);
+    }
+}

@@ -1,7 +1,11 @@
-﻿@page "/lazyloaders"
+﻿@page "/components/lazyloaders"
 
 @using MoonCore.Blazor.FlyonUI.Components
 @using MoonCore.Exceptions
+
+<div class="mb-5">
+    <NavTabs Index="3" Names="UiConstants.ComponentsNames" Links="UiConstants.ComponentsLinks" />
+</div>
 
 <LazyLoader @ref="LazyLoader" Load="Load">
     <div class="card sm:max-w-sm">
