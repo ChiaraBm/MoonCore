@@ -9,7 +9,6 @@ on:
 jobs:
   
   build-and-publish:
-    name: "Build packages and publish new versions"
     runs-on: ubuntu-latest
     strategy:
       matrix:

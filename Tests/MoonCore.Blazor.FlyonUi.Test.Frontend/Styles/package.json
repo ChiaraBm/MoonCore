@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "tailwind": "npx postcss styles.css -o ../wwwroot/style.min.css --config postcss.config.js --watch",
-    "tailwind-build": "npx postcss styles.css -o ../wwwroot/style.min.css --config postcss.config.js",
-    "mappings": "EXTRACT_CLASSES=true npx postcss styles.css -o ../wwwroot/style.min.css --config postcss.config.extract.js"
+    "tailwind": "npx postcss styles.css -o ../wwwroot/style.min.css --watch",
+    "tailwind-build": "npx postcss styles.css -o ../wwwroot/style.min.css",
+    "mappings": "EXTRACT_CLASSES=true npx postcss styles.css -o ../wwwroot/style.min.css"
   },
   "author": "",
   "license": "ISC",
