@@ -1,4 +1,5 @@
-name: Auto Publish Packages
+name: Automatic package publishing
+
 on:
   workflow_dispatch:
   push:
@@ -6,8 +7,42 @@ on:
       - main
 
 jobs:
-  publish:
+  
+  prepare-repo:
+    name: "Prepare repository"
     runs-on: ubuntu-latest
+    steps:
+      # Step 1: Clean environment
+      - name: Clean up Environment
+        run: |
+          rm -rf ./*
+          rm -rf ./.??*
+
+      # Step 2: Checkout the code
+      - name: Checkout code
+        uses: actions/checkout@v3
+  
+  
+  gen-tw-mappings:
+    name: "Generate Tailwind Mappings"
+    runs-on: ubuntu-latest
+    needs: prepare-repo
+    steps:
+      # Step 1: Download node_modules (aka. blackhole)
+      - name: "Download node_modules"
+        run: npm i
+        working-directory: "Tests/MoonCore.Blazor.FlyonUi.Test.Frontend/Styles"
+      
+      # Step 2: Run tailwind extract script
+      - name: "Extracting used classes from tailwind build"
+        run: npm run mappings
+        working-directory: "Tests/MoonCore.Blazor.FlyonUi.Test.Frontend/Styles"
+  
+  
+  build-and-publish:
+    name: "Build packages and publish new versions"
+    runs-on: ubuntu-latest
+    needs: gen-tw-mappings
     strategy:
       matrix:
         project:
@@ -19,26 +54,16 @@ jobs:
           - MoonCore.PluginFramework.Generator
     
     steps:
-      # Step 1: Clean environment
-      - name: Clean up Environment
-        run: |
-          rm -rf ./*
-          rm -rf ./.??*
-          
-      # Step 2: Checkout the code
-      - name: Checkout code
-        uses: actions/checkout@v3
-        
-      # Step 3: Setup .NET environment
+      # Step 1: Setup .NET environment
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: 9.0
       
-      # Step 4: Run the publishing action
+      # Step 2: Run the publishing action
       - name: Publish on version change
         uses: alirezanet/publish-nuget@v3.1.0
         with:
-          PROJECT_FILE_PATH: MoonCore/${{ matrix.project }}/${{ matrix.project }}.csproj
+          PROJECT_FILE_PATH: Library/${{ matrix.project }}/${{ matrix.project }}.csproj
           TAG_COMMIT: false
           NUGET_KEY: ${{secrets.NUGET_API_KEY}}

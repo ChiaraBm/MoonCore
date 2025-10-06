@@ -16,8 +16,8 @@ module.exports = (opts = {}) => {
         },
         OnceExit() {
             const classArray = Array.from(classSet).sort();
-            fs.writeFileSync('../../MoonCore.Blazor.FlyonUi/Styles/mooncore.map', classArray.join('\n'));
-            console.log(`✅ Extracted ${classArray.length} Tailwind classes to tailwind-classes.txt`);
+            fs.writeFileSync('../../Library/MoonCore.Blazor.FlyonUi/Styles/mooncore.map', classArray.join('\n'));
+            console.log(`Extracted classes ${classArray.length}`);
         }
     };
 };

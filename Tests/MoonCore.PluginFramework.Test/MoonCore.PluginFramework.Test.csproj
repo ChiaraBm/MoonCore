@@ -8,9 +8,9 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\MoonCore.PluginFramework.Generator\MoonCore.PluginFramework.Generator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+      <ProjectReference Include="..\..\Library\MoonCore.PluginFramework.Generator\MoonCore.PluginFramework.Generator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+      <ProjectReference Include="..\..\Library\MoonCore.PluginFramework\MoonCore.PluginFramework.csproj" />
       <ProjectReference Include="..\MoonCore.PluginFramework.Plugin\MoonCore.PluginFramework.Plugin.csproj" />
-      <ProjectReference Include="..\MoonCore.PluginFramework\MoonCore.PluginFramework.csproj" />
     </ItemGroup>
 
 </Project>

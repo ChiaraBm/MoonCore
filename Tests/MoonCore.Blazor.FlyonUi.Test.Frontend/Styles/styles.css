@@ -29,9 +29,9 @@
 @source "../../MoonCore.Blazor.FlyonUi.Test.Backend/**/*.cs";
 @source "../../MoonCore.Blazor.FlyonUi.Test.Backend/**/*.html";
 
-@source "../../MoonCore.Blazor.FlyonUi/**/*.razor";
-@source "../../MoonCore.Blazor.FlyonUi/**/*.cs";
-@source "../../MoonCore.Blazor.FlyonUi/**/*.html";
+@source "../../../Library/MoonCore.Blazor.FlyonUi/**/*.razor";
+@source "../../../Library/MoonCore.Blazor.FlyonUi/**/*.cs";
+@source "../../../Library/MoonCore.Blazor.FlyonUi/**/*.html";
 
 #blazor-error-ui {
     display: none;

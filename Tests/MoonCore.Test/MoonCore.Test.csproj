@@ -9,10 +9,10 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\MoonCore.Extended\MoonCore.Extended.csproj" />
-      <ProjectReference Include="..\MoonCore.PluginFramework\MoonCore.PluginFramework.csproj" />
-      <ProjectReference Include="..\MoonCore.Unix\MoonCore.Unix.csproj" />
-      <ProjectReference Include="..\MoonCore\MoonCore.csproj" />
+      <ProjectReference Include="..\..\Library\MoonCore.Extended\MoonCore.Extended.csproj" />
+      <ProjectReference Include="..\..\Library\MoonCore.PluginFramework\MoonCore.PluginFramework.csproj" />
+      <ProjectReference Include="..\..\Library\MoonCore.Unix\MoonCore.Unix.csproj" />
+      <ProjectReference Include="..\..\Library\MoonCore\MoonCore.csproj" />
     </ItemGroup>
 
     <ItemGroup>
