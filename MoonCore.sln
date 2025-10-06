@@ -1,34 +1,34 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoonCore", "MoonCore\MoonCore.csproj", "{9CFC971A-793C-4175-93B9-D7B61432D509}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoonCore", "Library\MoonCore\MoonCore.csproj", "{9CFC971A-793C-4175-93B9-D7B61432D509}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoonCore.Test", "MoonCore.Test\MoonCore.Test.csproj", "{1A4592F2-EF62-41B2-8981-7D2A68A0B1E0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoonCore.Test", "Tests\MoonCore.Test\MoonCore.Test.csproj", "{1A4592F2-EF62-41B2-8981-7D2A68A0B1E0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoonCore.Unix", "MoonCore.Unix\MoonCore.Unix.csproj", "{F8CC0186-7CA8-4E06-8E4C-DD7EE17CDEBF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoonCore.Unix", "Library\MoonCore.Unix\MoonCore.Unix.csproj", "{F8CC0186-7CA8-4E06-8E4C-DD7EE17CDEBF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoonCore.Extended", "MoonCore.Extended\MoonCore.Extended.csproj", "{1A6D4A21-4D18-4193-BA3E-8736899F316A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoonCore.Extended", "Library\MoonCore.Extended\MoonCore.Extended.csproj", "{1A6D4A21-4D18-4193-BA3E-8736899F316A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoonCore.PluginFramework", "MoonCore.PluginFramework\MoonCore.PluginFramework.csproj", "{B945469E-4FF0-447D-89DB-3B9290FBC396}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoonCore.PluginFramework", "Library\MoonCore.PluginFramework\MoonCore.PluginFramework.csproj", "{B945469E-4FF0-447D-89DB-3B9290FBC396}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoonCore.Extended.Test", "MoonCore.Extended.Test\MoonCore.Extended.Test.csproj", "{53C18C70-9246-4030-85BD-82AC33DFE1AB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoonCore.Extended.Test", "Tests\MoonCore.Extended.Test\MoonCore.Extended.Test.csproj", "{53C18C70-9246-4030-85BD-82AC33DFE1AB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoonCore.PluginFramework.Generator", "MoonCore.PluginFramework.Generator\MoonCore.PluginFramework.Generator.csproj", "{14D94791-CA78-42B9-B9EB-155BCECB816D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoonCore.PluginFramework.Generator", "Library\MoonCore.PluginFramework.Generator\MoonCore.PluginFramework.Generator.csproj", "{14D94791-CA78-42B9-B9EB-155BCECB816D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoonCore.PluginFramework.Test", "MoonCore.PluginFramework.Test\MoonCore.PluginFramework.Test.csproj", "{193E2FE4-A85C-44CC-A363-9B22C895DB6A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoonCore.PluginFramework.Test", "Tests\MoonCore.PluginFramework.Test\MoonCore.PluginFramework.Test.csproj", "{193E2FE4-A85C-44CC-A363-9B22C895DB6A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoonCore.Blazor.FlyonUi", "MoonCore.Blazor.FlyonUi\MoonCore.Blazor.FlyonUi.csproj", "{67E72F8C-E84D-482C-9CF8-1B77678B793D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoonCore.Blazor.FlyonUi", "Library\MoonCore.Blazor.FlyonUi\MoonCore.Blazor.FlyonUi.csproj", "{67E72F8C-E84D-482C-9CF8-1B77678B793D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoonCore.PluginFramework.Plugin", "MoonCore.PluginFramework.Plugin\MoonCore.PluginFramework.Plugin.csproj", "{897E64D0-7635-47EF-88E8-D6190966B0B1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoonCore.PluginFramework.Plugin", "Tests\MoonCore.PluginFramework.Plugin\MoonCore.PluginFramework.Plugin.csproj", "{897E64D0-7635-47EF-88E8-D6190966B0B1}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Library", "Library", "{891B96F1-EFFF-4B35-A789-BCAD0F4E4B2F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{01988DB8-D430-43F9-96EA-BD1D88CD9006}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoonCore.Blazor.FlyonUi.Test.Frontend", "MoonCore.Blazor.FlyonUi.Test.Frontend\MoonCore.Blazor.FlyonUi.Test.Frontend.csproj", "{B92EA1EE-7C29-4900-A5FA-BDE99690A12E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoonCore.Blazor.FlyonUi.Test.Frontend", "Tests\MoonCore.Blazor.FlyonUi.Test.Frontend\MoonCore.Blazor.FlyonUi.Test.Frontend.csproj", "{B92EA1EE-7C29-4900-A5FA-BDE99690A12E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoonCore.Blazor.FlyonUi.Test.Backend", "MoonCore.Blazor.FlyonUi.Test.Backend\MoonCore.Blazor.FlyonUi.Test.Backend.csproj", "{B2617225-58BF-4B22-B7BA-02A5093A970B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoonCore.Blazor.FlyonUi.Test.Backend", "Tests\MoonCore.Blazor.FlyonUi.Test.Backend\MoonCore.Blazor.FlyonUi.Test.Backend.csproj", "{B2617225-58BF-4B22-B7BA-02A5093A970B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoonCore.Blazor.FlyonUi.Test.Shared", "MoonCore.Blazor.FlyonUi.Test.Shared\MoonCore.Blazor.FlyonUi.Test.Shared.csproj", "{D83CB67A-4A3E-47B9-BC03-9C5CD2223449}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoonCore.Blazor.FlyonUi.Test.Shared", "Tests\MoonCore.Blazor.FlyonUi.Test.Shared\MoonCore.Blazor.FlyonUi.Test.Shared.csproj", "{D83CB67A-4A3E-47B9-BC03-9C5CD2223449}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

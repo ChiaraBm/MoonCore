@@ -14,8 +14,8 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\MoonCore.Blazor.FlyonUi.Test.Shared\MoonCore.Blazor.FlyonUi.Test.Shared.csproj" />
-      <ProjectReference Include="..\MoonCore.Blazor.FlyonUi\MoonCore.Blazor.FlyonUi.csproj" />
+      <ProjectReference Include="..\\MoonCore.Blazor.FlyonUi.Test.Shared\MoonCore.Blazor.FlyonUi.Test.Shared.csproj" />
+      <ProjectReference Include="..\..\Library\MoonCore.Blazor.FlyonUi\MoonCore.Blazor.FlyonUi.csproj" />
     </ItemGroup>
     
     <ItemGroup>
