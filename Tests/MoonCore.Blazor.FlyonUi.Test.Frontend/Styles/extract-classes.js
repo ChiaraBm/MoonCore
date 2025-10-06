@@ -16,6 +16,7 @@ module.exports = (opts = {}) => {
         },
         OnceExit() {
             const classArray = Array.from(classSet).sort();
+            fs.mkdirSync('../../../Library/MoonCore.Blazor.FlyonUi/Styles')
             fs.writeFileSync('../../../Library/MoonCore.Blazor.FlyonUi/Styles/mooncore.map', classArray.join('\n'));
             console.log(`Extracted classes ${classArray.length}`);
         }
