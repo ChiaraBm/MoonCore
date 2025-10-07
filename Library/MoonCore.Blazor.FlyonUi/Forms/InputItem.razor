@@ -1,50 +1,35 @@
+@using Microsoft.AspNetCore.Components.Web.Virtualization
 @using Microsoft.Extensions.Logging
+@using MoonCore.Blazor.FlyonUi.Common
+@using MoonCore.Common
+
 @typeparam TItem
 
 @inject ILogger<InputItem<TItem>> Logger
 
 <div class="advance-select relative active">
-    @if (IsLoading)
-    {
-        <button type="button" aria-expanded="true"
-                class="advance-select-toggle select-disabled:pointer-events-none select-disabled:opacity-40"
-                disabled="disabled">
-            <span class="truncate italic">Loading</span>
-        </button>
-    }
-    else if (IsFailed)
-    {
-        <button type="button" aria-expanded="true"
-                class="advance-select-toggle select-disabled:pointer-events-none select-disabled:opacity-40"
-                disabled="disabled">
-            <span class="truncate text-error">Failed to load</span>
-        </button>
-    }
-    else
-    {
-        <button @onclick="ToggleVisibilityAsync" type="button" aria-expanded="true"
-                class="advance-select-toggle">
-            @if (Value == null)
-            {
-                <span class="truncate">
-                    Select option...
-                </span>
-            }
-            else
-            {
-                <span class="truncate">
-                    @DisplayField.Invoke(Value)
-                </span>
-            }
-        </button>
-    }
+    <button @onclick="ToggleVisibilityAsync" type="button" aria-expanded="true"
+            class="advance-select-toggle">
+        @if (Value == null)
+        {
+            <span class="truncate">
+                Select option...
+            </span>
+        }
+        else
+        {
+            <span class="truncate">
+                @DisplayField.Invoke(Value)
+            </span>
+        }
+    </button>
 
-    @if (IsVisible && VisibleItems != null)
+    @if (IsVisible)
     {
         <div class="absolute advance-select-menu opened top-full mt-3 z-70 max-h-52 overflow-y-auto pt-0 px-2.5 bg-base-200! shadow-lg" role="listbox" tabindex="-1"
              aria-orientation="vertical">
 
-            @if (SearchField != null)
+            @if (ItemSource.IsFilterable)
             {
                 <div class="bg-base-200 sticky top-0 border-b-2 border-b-base-content/20">
                     <input @oninput="OnSearchInput" value="@SearchTerm"
@@ -57,23 +42,30 @@
                 <div class="mb-2"></div>
             }
 
-            @if (VisibleItems.Length == 0)
-            {
-                <div class="flex items-center justify-center pt-2 pb-1">
-                    <span class="text-base-content/80">No items found</span>
-                </div>
-            }
-            else
-            {
-                foreach (var item in VisibleItems)
-                {
+            <Virtualize Context="item" TItem="TItem" MaxItemCount="MaxItems" ItemsProvider="LoadItemsInternalAsync" ItemSize="44">
+                <Placeholder>
+                    <div tabindex="0"
+                         class="cursor-progress advance-select-option disabled">
+                        <div class="flex flex-row justify-start items-center w-full">
+                            <div class="italic">
+                                Loading
+                            </div>
+                        </div>
+                    </div>
+                </Placeholder>
+                <EmptyContent>
+                    <div class="flex items-center justify-center pt-2 pb-1">
+                        <span class="text-base-content/80">No items found</span>
+                    </div>
+                </EmptyContent>
+                <ItemContent>
                     <div @onclick="() => SelectAsync(item)"
                          tabindex="0"
                          class="cursor-pointer advance-select-option selected:select-active @(item!.Equals(Value) ? "selected" : "")">
                         @if (item.Equals(Value))
                         {
                             <div class="flex flex-row justify-between items-center w-full">
-                                <div>
+                                <div class="truncate">
                                     @DisplayField.Invoke(item)
                                 </div>
                                 <div>
@@ -84,31 +76,20 @@
                         else
                         {
                             <div class="flex flex-row justify-start items-center w-full">
-                                <div>
+                                <div class="truncate">
                                     @DisplayField.Invoke(item)
                                 </div>
                             </div>
                         }
                     </div>
-                }
-            }
+                </ItemContent>
+            </Virtualize>
         </div>
         
         <div @onclick="OnFocusOut" class="overlay-backdrop transition duration-300 fixed inset-0 overflow-y-auto z-69"></div>
     }
-
-    @if (IsLoading)
-    {
-        <span class="loading loading-spinner loading-xs absolute top-1/2 end-3 -translate-y-1/2"></span>
-    }
-    else if (IsFailed)
-    {
-        <i class="icon-triangle-alert text-error absolute top-1/2 end-3 -translate-y-1/2"></i>
-    }
-    else
-    {
-        <i class="icon-chevrons-up-down text-base-content absolute top-1/2 end-3 -translate-y-1/2"></i>
-    }
+    
+    <i class="icon-chevrons-up-down text-base-content absolute top-1/2 end-3 -translate-y-1/2"></i>
 </div>
 
 @code
@@ -146,9 +127,13 @@
     #endregion
 
     /// <summary>
-    /// Callback used to retrieve the items which should be shown in the item select
+    /// ItemSource to retrieve the items to display from.
+    /// Supports filtering (and pagination when filtering)
     /// </summary>
-    [Parameter] public required Func<Task<TItem[]>> ItemSource { get; set; }
+    [Parameter] public required ItemSource<TItem> ItemSource { get; set; }
+
+    
+    [Parameter] public int MaxItems { get; set; } = 25;
     
     /// <summary>
     /// Define which field should be used to display the item in the dropdown.
@@ -161,24 +146,8 @@
     /// </code>
     /// </summary>
     [Parameter] public required Func<TItem, object> DisplayField { get; set; }
-    
-    /// <summary>
-    /// Define which field should be used to search the item in the dropdown.
-    /// This expression can also build a string to combine multiple properties
-    /// <br />
-    /// <br />
-    /// Example:
-    /// <code>
-    /// SearchField="@(x => $"{x.FirstName} {x.LastName}")"
-    /// </code>
-    /// </summary>
-    [Parameter] public Func<TItem, object>? SearchField { get; set; }
 
-    private bool IsLoading;
     private bool IsVisible;
-    private bool IsFailed;
-    private TItem[]? Items;
-    private TItem[]? VisibleItems;
 
     private string SearchTerm = "";
     
@@ -202,58 +171,29 @@
     private async Task ToggleVisibilityAsync()
     {
         IsVisible = !IsVisible;
-
-        if (IsVisible && Items == null)
-        {
-            IsLoading = true;
-            Task.Run(LoadItemsAsync);
-        }
-
         await InvokeAsync(StateHasChanged);
     }
-
-    private async Task LoadItemsAsync()
-    {
-        try
-        {
-            Items = await ItemSource.Invoke();
-            VisibleItems = Items;
-        }
-        catch (Exception e)
-        {
-            Logger.LogError(e, "An error occured while loading items");
-
-            IsFailed = true;
-        }
-        finally
-        {
-            IsLoading = false;
-        }
-
-        await InvokeAsync(StateHasChanged);
-    }
-
+    
     private async Task OnSearchInput(ChangeEventArgs eventArgs)
     {
-        if(Items == null || SearchField == null)
-            return;
-        
         SearchTerm = eventArgs.Value?.ToString() ?? "";
 
-        if (!string.IsNullOrEmpty(SearchTerm))
-        {
-            VisibleItems = Items
-                .Where(item =>
-                    {
-                        var fieldStr = SearchField.Invoke(item).ToString() ?? "";
-                        return fieldStr.Contains(SearchTerm, StringComparison.InvariantCultureIgnoreCase);
-                    }
-                )
-                .ToArray();
-        }
-        else
-            VisibleItems = Items;
+       
+    }
 
-        await InvokeAsync(StateHasChanged);
+    private async ValueTask<ItemsProviderResult<TItem>> LoadItemsInternalAsync(ItemsProviderRequest request)
+    {
+        var response = await ItemSource.QueryAsync(request.StartIndex, request.Count, SearchTerm, null);
+
+        // Early exit for pre counted data
+        if (response is CountedData<TItem> countedData)
+            return new ItemsProviderResult<TItem>(countedData.Items, countedData.TotalCount);
+        
+        // We are creating the array here as if we would use Count() it may enumerate multiple times
+        var data = response.ToArray();
+        
+        var items = data.Skip(request.StartIndex).Take(request.Count);
+
+        return new ItemsProviderResult<TItem>(items, data.Length);
     }
 }

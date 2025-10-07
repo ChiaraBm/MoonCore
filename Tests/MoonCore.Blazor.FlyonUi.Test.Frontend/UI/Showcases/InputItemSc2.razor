@@ -1,16 +1,19 @@
+@using MoonCore.Blazor.FlyonUi.Common
 @using MoonCore.Blazor.FlyonUi.Forms
 @using MoonCore.Exceptions
 
 <InputItem TItem="DemoItem"
            @bind-Value="SelectedItem"
            DisplayField="@(x => x.Name)"
-           ItemSource="GetItemsFailingAsync" />
+           ItemSource="ItemSource" />
 
 @code
 {
     private DemoItem? SelectedItem = null;
     
-    private async Task<DemoItem[]> GetItemsFailingAsync()
+    private ItemSource<DemoItem> ItemSource => ItemSourceFactory.From(GetItemsFailingAsync);
+    
+    private async Task<IEnumerable<DemoItem>> GetItemsFailingAsync()
     {
         await Task.Delay(TimeSpan.FromSeconds(2));
 
