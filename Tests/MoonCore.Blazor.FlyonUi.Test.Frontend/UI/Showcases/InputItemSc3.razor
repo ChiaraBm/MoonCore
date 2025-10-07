@@ -16,7 +16,11 @@
     private async Task<IEnumerable<DemoItem>> GetItemsAsync(string? filter)
     {
         await Task.Delay(TimeSpan.FromSeconds(1));
-        return Items;
+        
+        if(string.IsNullOrWhiteSpace(filter))
+            return Items;
+
+        return Items.Where(x => x.Name.Contains(filter, StringComparison.OrdinalIgnoreCase));
     }
     
     protected override void OnInitialized()

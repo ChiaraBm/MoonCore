@@ -42,7 +42,12 @@
                 <div class="mb-2"></div>
             }
 
-            <Virtualize Context="item" TItem="TItem" MaxItemCount="MaxItems" ItemsProvider="LoadItemsInternalAsync" ItemSize="44">
+            <Virtualize @ref="VirtualizeHandle"
+                        Context="item"
+                        TItem="TItem"
+                        MaxItemCount="MaxItems"
+                        ItemsProvider="LoadItemsInternalAsync"
+                        ItemSize="44">
                 <Placeholder>
                     <div tabindex="0"
                          class="cursor-progress advance-select-option disabled">
@@ -61,8 +66,8 @@
                 <ItemContent>
                     <div @onclick="() => SelectAsync(item)"
                          tabindex="0"
-                         class="cursor-pointer advance-select-option selected:select-active @(item!.Equals(Value) ? "selected" : "")">
-                        @if (item.Equals(Value))
+                         class="cursor-pointer advance-select-option selected:select-active @(item?.Equals(Value) ?? false ? "selected" : "")">
+                        @if (item?.Equals(Value) ?? false)
                         {
                             <div class="flex flex-row justify-between items-center w-full">
                                 <div class="truncate">
@@ -148,6 +153,7 @@
     [Parameter] public required Func<TItem, object> DisplayField { get; set; }
 
     private bool IsVisible;
+    private Virtualize<TItem> VirtualizeHandle;
 
     private string SearchTerm = "";
     
@@ -170,6 +176,7 @@
 
     private async Task ToggleVisibilityAsync()
     {
+        SearchTerm = "";
         IsVisible = !IsVisible;
         await InvokeAsync(StateHasChanged);
     }
@@ -178,7 +185,7 @@
     {
         SearchTerm = eventArgs.Value?.ToString() ?? "";
 
-       
+        await VirtualizeHandle.RefreshDataAsync();
     }
 
     private async ValueTask<ItemsProviderResult<TItem>> LoadItemsInternalAsync(ItemsProviderRequest request)
