@@ -23,7 +23,7 @@
     /// List containing the entered tags. Will be modified by the component
     /// </summary>
     [Parameter]
-    public List<string> Value { get; set; } = new();
+    public IList<string> Value { get; set; } = new List<string>();
     
     /// <summary>
     /// Callback which will be invoked whenevr a tag gets added or removed
