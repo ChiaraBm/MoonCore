@@ -3,6 +3,8 @@ name: Automatic package publishing
 on:
   workflow_dispatch:
   push:
+    paths:
+      - "Library/**"
     branches:
       - main
 
