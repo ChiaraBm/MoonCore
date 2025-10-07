@@ -9,7 +9,7 @@ namespace MoonCore.Blazor.FlyonUi.Files.Manager.Operations;
 
 public class EditorOpenOperation : IFsOpenOperation
 {
-    public Func<FsEntry, bool> Filter => file => CodeEditorModeHelper.IsValidExtension(Path.GetExtension(file.Name));
+    public Func<FsEntry, bool> Filter => file => CodeEditorModeHelper.IsFileSupported(file.Name);
     public int Order => 0;
 
     public bool CheckCompatability(IFsAccess access, IFileManager fileManager) => true;
