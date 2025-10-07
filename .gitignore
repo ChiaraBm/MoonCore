@@ -403,3 +403,7 @@ style.min.css
 **/testFs/**
 **/storage/**
 **/mooncore.map
+
+# Docs
+Docs/api/**
+Docs/_site/**
