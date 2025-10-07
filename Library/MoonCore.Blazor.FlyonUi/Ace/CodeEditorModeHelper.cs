@@ -1,8 +1,10 @@
 using System.Collections.Frozen;
-using System.Collections.Immutable;
 
 namespace MoonCore.Blazor.FlyonUi.Ace;
 
+/// <summary>
+/// Helper class for determining settings and performing validation for the code editor component
+/// </summary>
 public static class CodeEditorModeHelper
 {
     // We probably will never need every of these modes ;)
@@ -322,28 +324,41 @@ public static class CodeEditorModeHelper
         "nanorc", "nc", "ooc", "rst", "rest", "resttxt", "rsttxt", "sed", "templ", "wisp", "prg", "prw"
     };
 
+    /// <summary>
+    /// Retrieves the best editor mode (syntax highlighting setting) for the provided file name by its extension
+    /// </summary>
+    /// <param name="fileName">File name of the file you want to open</param>
+    /// <returns>Mode of the editor to use. Should be appended to "ace/mode/" when put into the ace editor instance</returns>
     public static string GetModeFromFile(string fileName)
     {
-        var extension = Path.GetExtension(fileName).Replace(".", "");
-
-        if (string.IsNullOrEmpty(extension))
-            return "text";
+        var key = GetLookupKey(fileName);
 
         foreach (var entry in ExtensionIndex)
         {
-            if (entry.Value.Any(x => string.Equals(x, extension, StringComparison.InvariantCultureIgnoreCase)))
+            if (entry.Value.Any(x => string.Equals(x, key, StringComparison.OrdinalIgnoreCase)))
                 return entry.Key;
         }
 
         return "text";
     }
 
-    public static bool IsValidExtension(string extension)
+    /// <summary>
+    /// Checks whether a file is supported by the code editor and/or is a valid source/text file
+    /// </summary>
+    /// <param name="fileName">Filename to check</param>
+    /// <returns>Whether the file name is supported ot not</returns>
+    public static bool IsFileSupported(string fileName)
     {
-        var extensionWithoutDot = extension[0] == '.'
-            ? extension.TrimStart('.')
-            : extension;
+        var key = GetLookupKey(fileName);
+        
+        return ValidExtensions.Contains(key);
+    }
 
-        return ValidExtensions.Contains(extensionWithoutDot);
+    private static string GetLookupKey(string fileName)
+    {
+        var extension = Path.GetExtension(fileName);
+        
+        var key = string.IsNullOrWhiteSpace(extension) ? fileName : extension;
+        return key.TrimStart('.');
     }
 }
