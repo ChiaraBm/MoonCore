@@ -1,4 +1,5 @@
 ﻿@using System.ComponentModel.DataAnnotations
+@using MoonCore.Blazor.FlyonUi.Common
 @using MoonCore.Blazor.FlyonUi.Components
 @using MoonCore.Blazor.FlyonUi.Exceptions
 @using MoonCore.Blazor.FlyonUi.Files.Manager.Abstractions
@@ -25,7 +26,7 @@
                 <label class="label-text">Format</label>
                 <InputItem TItem="ArchiveFormat"
                            DisplayField="@(x => x.DisplayName)"
-                           ItemSource="ItemSourceAsync"
+                           ItemSource="ItemSourceFactory.From(ItemSourceAsync)"
                            Value="SelectedFormat"
                            ValueChanged="OnFormatChanged"/>
             </div>
@@ -86,8 +87,8 @@
         await HideAsync();
     }
 
-    private Task<ArchiveFormat[]> ItemSourceAsync()
-        => Task.FromResult(Formats);
+    private Task<IEnumerable<ArchiveFormat>> ItemSourceAsync()
+        => Task.FromResult<IEnumerable<ArchiveFormat>>(Formats);
 
     private async Task OnFormatChanged(ArchiveFormat? newFormat)
     {
