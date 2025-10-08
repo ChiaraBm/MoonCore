@@ -40,6 +40,8 @@ public partial class FileManager
     
     private async Task SetPathAsync(string path)
     {
+        Console.WriteLine($"SP: {path}");
+        
         CurrentPath = path;
 
         await FileView.RefreshAsync();

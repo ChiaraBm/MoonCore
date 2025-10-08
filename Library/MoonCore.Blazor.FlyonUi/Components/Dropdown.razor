@@ -1,13 +1,18 @@
-<div class="dropdown relative inline-flex @(Show ? "open" : "")">
+@using MoonCore.Helpers
+<div class="dropdown relative inline-flex @(IsVisible ? "open" : "")">
     <a href="#" @onclick="ToggleAsync" @onclick:preventDefault>
         @Activator
     </a>
-    <div @ref="Reference" @onclick="OnFocusOutDelayed" class="dropdown-menu dropdown-open:opacity-100 block absolute @Align mt-12 w-56 origin-top-left z-70" role="menu" aria-orientation="vertical" aria-labelledby="dropdown-default">
-        @Content
-    </div>
+    
+    @if (IsActive)
+    {
+        <div @onclick="OnFocusOutDelayed" class="dropdown-menu dropdown-open:opacity-100 block absolute @Align mt-12 w-56 origin-top-left z-70" role="menu" aria-orientation="vertical" aria-labelledby="dropdown-default">
+            @Content
+        </div>
+    }
 </div>
 
-@if (Show)
+@if (IsActive)
 {
     <div @onclick="OnFocusOut" class="overlay-backdrop transition duration-300 fixed inset-0 overflow-y-auto z-69"></div>
 }
@@ -29,28 +34,36 @@
     /// </summary>
     [Parameter] public string Align { get; set; } = "left-0";
 
-    private bool Show = false;
-    private ElementReference Reference;
+    private bool IsActive = false;
+    private bool IsVisible = false;
 
-    protected override async Task OnAfterRenderAsync(bool firstRender)
+    private const int DelayMs = 10;
+    private Debouncer Debouncer = new(DelayMs);
+
+    private Task ToggleAsync()
     {
-        if(!Show)
-            return;
+        Debouncer.Debounce(async () =>
+        {
+            IsActive = !IsActive;
+            await InvokeAsync(StateHasChanged);
 
-        await Reference.FocusAsync();
-    }
+            if (IsActive)
+            {
+                await Task.Delay(DelayMs);
 
-    private async Task ToggleAsync()
-    {
-        Show = !Show;
-        await InvokeAsync(StateHasChanged);
+                IsVisible = true;
+                await InvokeAsync(StateHasChanged);
+            }
+        });
+        
+        return Task.CompletedTask;
     }
 
     private async Task OnFocusOutDelayed()
     {
         try
         {
-            await Task.Delay(150);
+            await Task.Delay(DelayMs);
             await OnFocusOut();
         }
         catch (TaskCanceledException)
@@ -60,7 +73,13 @@
     
     private async Task OnFocusOut()
     {
-        Show = false;
+        IsVisible = false;
         await InvokeAsync(StateHasChanged);
+        
+        Debouncer.Debounce(async () =>
+        {
+            IsActive = false;
+            await InvokeAsync(StateHasChanged);
+        });
     }
 }
