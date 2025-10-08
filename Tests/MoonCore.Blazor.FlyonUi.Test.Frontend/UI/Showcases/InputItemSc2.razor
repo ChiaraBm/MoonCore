@@ -9,15 +9,32 @@
 
 @code
 {
+    private DemoItem[] Items;
     private DemoItem? SelectedItem = null;
     
-    private ItemSource<DemoItem> ItemSource => ItemSourceFactory.From(GetItemsFailingAsync);
+    private ItemSource<DemoItem> ItemSource => ItemSourceFactory.From(GetItemsSlowAsync);
     
-    private async Task<IEnumerable<DemoItem>> GetItemsFailingAsync()
+    private async Task<IEnumerable<DemoItem>> GetItemsSlowAsync()
     {
-        await Task.Delay(TimeSpan.FromSeconds(2));
+        await Task.Delay(TimeSpan.FromSeconds(1));
+        
+        return Items;
+    }
+    
+    protected override void OnInitialized()
+    {
+        var items = new List<DemoItem>();
 
-        throw new HttpApiException("Whoops i failed", 500);
+        for (var i = 0; i < 100; i++)
+        {
+            items.Add(new DemoItem()
+            {
+                Id = i,
+                Name = $"Item {i}"
+            });
+        }
+
+        Items = items.ToArray();
     }
     
     record DemoItem

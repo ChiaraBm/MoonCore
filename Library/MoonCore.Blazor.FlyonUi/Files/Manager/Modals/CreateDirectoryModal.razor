@@ -27,7 +27,7 @@
         <button @onclick="HideAsync" type="button" class="btn btn-secondary me-2">
             Cancel
         </button>
-        <WButton OnClick="HandleForm.SubmitAsync">
+        <WButton OnClick="() => HandleForm.SubmitAsync()">
             Create
         </WButton>
     </div>

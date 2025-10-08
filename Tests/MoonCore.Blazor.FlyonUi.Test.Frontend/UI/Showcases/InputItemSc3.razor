@@ -15,8 +15,6 @@
     
     private async Task<IEnumerable<DemoItem>> GetItemsAsync(string? filter)
     {
-        await Task.Delay(TimeSpan.FromSeconds(1));
-        
         if(string.IsNullOrWhiteSpace(filter))
             return Items;
 
