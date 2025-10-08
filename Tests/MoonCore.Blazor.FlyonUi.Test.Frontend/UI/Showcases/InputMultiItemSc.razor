@@ -1,20 +1,21 @@
+@using MoonCore.Blazor.FlyonUi.Common
 @using MoonCore.Blazor.FlyonUi.Forms
 
 <InputMultipleItem TItem="DemoItem"
                    Value="SelectedItems"
                    DisplayField="@(x => x.Name)"
-                   SearchField="@(x => x.Name)"
-                   ItemSource="GetItemsAsync" />
+                   ItemSource="ItemSource" />
 
 @code
 {
     private DemoItem[] Items;
     private List<DemoItem> SelectedItems = new();
+
+    private ItemSource<DemoItem> ItemSource => ItemSourceFactory.From(GetItemsAsync);
     
-    private async Task<DemoItem[]> GetItemsAsync()
+    private Task<IEnumerable<DemoItem>> GetItemsAsync()
     {
-        await Task.Delay(TimeSpan.FromSeconds(1));
-        return Items;
+        return Task.FromResult<IEnumerable<DemoItem>>(Items);
     }
     
     protected override void OnInitialized()

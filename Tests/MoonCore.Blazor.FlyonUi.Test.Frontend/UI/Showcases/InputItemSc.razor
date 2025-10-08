@@ -4,7 +4,7 @@
 <InputItem TItem="DemoItem"
            @bind-Value="SelectedItem"
            DisplayField="@(x => x.Name)"
-           ItemSource="ItemSource" />
+           ItemSource="ItemSource"/>
 
 @code
 {
@@ -13,10 +13,9 @@
 
     private ItemSource<DemoItem> ItemSource => ItemSourceFactory.From(GetItemsAsync);
     
-    private async Task<IEnumerable<DemoItem>> GetItemsAsync()
+    private Task<IEnumerable<DemoItem>> GetItemsAsync()
     {
-        await Task.Delay(TimeSpan.FromSeconds(1));
-        return Items;
+        return Task.FromResult<IEnumerable<DemoItem>>(Items);
     }
     
     protected override void OnInitialized()
