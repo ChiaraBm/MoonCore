@@ -23,7 +23,7 @@
                             if (config == null) // Ignore all schemes which have no ui configured
                                 continue;
 
-                            <button @onclick="() => Start(scheme)" class="btn btn-text w-full" style="background-color: @(config.Color)">
+                            <button @onclick="() => Start(scheme)" class="btn w-full" style="background-color: @(config.Color)">
                                 <img src="@config.IconUrl"
                                      alt="scheme icon"
                                      class="size-5 object-cover fill-base-content"/>

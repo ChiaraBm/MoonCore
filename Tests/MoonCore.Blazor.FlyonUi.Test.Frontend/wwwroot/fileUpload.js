@@ -1,14 +1,8 @@
 ﻿window.moonCoreFileUpload = {
-    init: function () {
+    init: function (dropZoneId, fileInputId, callbackRef) {
 
-    },
-    registerDropHandler: function (elementId, inputId, callbackRef) {
-        const dropZone = document.getElementById(elementId);
-        const input = document.getElementById(inputId);
-        if (!dropZone) {
-            console.error(`Element with id "${elementId}" not found.`);
-            return;
-        }
+        const dropZone = document.getElementById(dropZoneId);
+        const fileInput = document.getElementById(fileInputId);
 
         const doUpload = async function (path, file) {
             //const stream = file.stream();
@@ -17,9 +11,84 @@
                 return;
 
             const streamRef = DotNet.createJSStreamReference(file);
-            
+
             await callbackRef.invokeMethodAsync("Handle", path, streamRef);
         };
+
+        const handleDragEvent = async function (dragEvent) {
+
+            // Prevent default shit
+            dragEvent.preventDefault();
+            dragEvent.stopPropagation();
+
+            const items = dragEvent.dataTransfer?.items || [];
+
+            // First extract all webkit entries while DataTransfer is still accessible
+            // cause when we do our async interop with blazor it will be gone.
+            // Don't ask why...
+
+            const entries = [];
+            const files = [];
+
+            for (let i = 0; i < items.length; i++) {
+                const item = items[i];
+
+                if (item.kind !== 'file')
+                    continue;
+
+                const entry = item.webkitGetAsEntry?.();
+
+                if (entry) {
+                    entries.push(entry);
+                } else {
+                    // Fallback for browsers without webkitGetAsEntry support.
+                    // I dunno who would use such an outdated browser but whatever
+                    const file = item.getAsFile();
+
+                    if (!file) {
+                        console.log("Unable to get file or entry from item", item);
+                        continue;
+                    }
+
+                    files.push(file);
+                }
+            }
+
+            // Second process all collected entries
+            for (const entry of entries) {
+                await callbackRef.invokeMethodAsync("Start", entry.name);
+
+                await processEntry(entry);
+
+                await callbackRef.invokeMethodAsync("Stop");
+            }
+
+            // Third process fallback files
+            for (const file of files) {
+                await doUpload(file.name, file);
+            }
+        };
+
+        const processEntry = async function (entry, path = '') {
+            if (entry.isFile) {
+                const file = await new Promise((resolve, reject) => {
+                    entry.file(resolve, reject);
+                });
+
+                const fullPath = path ? `${path}/${file.name}` : file.name;
+                await doUpload(fullPath, file);
+            } else if (entry.isDirectory) {
+                const reader = entry.createReader();
+                const entries = await new Promise((resolve, reject) => {
+                    reader.readEntries(resolve, reject);
+                });
+
+                for (const childEntry of entries) {
+                    const childPath = path ? `${path}/${entry.name}` : entry.name;
+                    await processEntry(childEntry, childPath);
+                }
+            }
+        }
 
         // Prevent default behavior for drag events
         const preventDefaults = (e) => {
@@ -32,18 +101,14 @@
         });
 
         dropZone.addEventListener('drop', async (e) => {
-            try {
-                const items = e.dataTransfer.items;
-                if (!items) return;
+            const items = e.dataTransfer.items;
 
-                await this.handleDragEvent(e, doUpload, callbackRef);
-            }
-            catch (e) {
-                console.log(e);
-            }
+            if (!items) return;
+
+            await handleDragEvent(e);
         });
 
-        input.addEventListener("change", async function (ev) {
+        fileInput.addEventListener("change", async function (ev) {
             await callbackRef.invokeMethodAsync("Start", ev.target.files.length > 1 ? "multiple files" : "file");
 
             for (const file of ev.target.files) {
@@ -51,75 +116,6 @@
             }
 
             await callbackRef.invokeMethodAsync("Stop");
-        })
-    },
-
-    handleDragEvent: async function (dragEvent, callback, callbackRef) {
-        dragEvent.preventDefault();
-        dragEvent.stopPropagation();
-
-        const items = dragEvent.dataTransfer?.items || [];
-
-        // First pass: Extract all webkit entries while DataTransfer is still accessible
-        const entries = [];
-        const files = [];
-
-        for (let i = 0; i < items.length; i++) {
-            const item = items[i];
-
-            if (item.kind === 'file') {
-                const entry = item.webkitGetAsEntry?.();
-
-                if (entry) {
-                    entries.push(entry);
-                } else {
-                    // Fallback for browsers without webkitGetAsEntry support
-                    const file = item.getAsFile();
-                    if (file) {
-                        files.push(file);
-                    } else {
-                        console.log("Unable to get file or entry from item", item);
-                    }
-                }
-            }
-        }
-
-        // Second pass: Process all collected entries
-        for (const entry of entries) {
-            console.log("Processing entry:", entry);
-
-            await callbackRef.invokeMethodAsync("Start", entry.name);
-            console.log("Uploading directory: " + entry.name);
-            await this.processEntry(entry, callback);
-
-            await callbackRef.invokeMethodAsync("Stop");
-        }
-
-        // Third pass: Process fallback files
-        for (const file of files) {
-            console.log("Processing file:", file.name);
-            await callback(file.name, file);
-        }
-    },
-
-    processEntry: async function (entry, callback, path = '') {
-        if (entry.isFile) {
-            const file = await new Promise((resolve, reject) => {
-                entry.file(resolve, reject);
-            });
-
-            const fullPath = path ? `${path}/${file.name}` : file.name;
-            await callback(fullPath, file);
-        } else if (entry.isDirectory) {
-            const reader = entry.createReader();
-            const entries = await new Promise((resolve, reject) => {
-                reader.readEntries(resolve, reject);
-            });
-
-            for (const childEntry of entries) {
-                const childPath = path ? `${path}/${entry.name}` : entry.name;
-                await this.processEntry(childEntry, callback, childPath);
-            }
-        }
+        });
     }
 }
