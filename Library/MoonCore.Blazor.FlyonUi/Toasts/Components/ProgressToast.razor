@@ -18,18 +18,18 @@
     /// <summary>
     /// Title of the toast
     /// </summary>
-    [Parameter] public string Title { get; set; }
+    public string Title { get; set; }
     
     /// <summary>
     /// Content of the toast
     /// </summary>
-    [Parameter] public string Text { get; set; }
+    public string Text { get; set; }
     
     /// <summary>
     /// Worker callback which hides the toast after the callback has returned.
     /// Call your actual work code inside this callback
     /// </summary>
-    [Parameter] public Func<ProgressToast, Task> Work { get; set; }
+    public Func<ProgressToast, Task> Work { get; set; }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {

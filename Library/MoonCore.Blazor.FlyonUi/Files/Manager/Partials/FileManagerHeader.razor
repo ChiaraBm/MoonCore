@@ -6,11 +6,7 @@
     <div class="grid grid-cols-2">
         <div class="col-span-1">
             <div class="flex flex-row justify-start">
-                <button @onclick="OnRefreshClick" class="btn btn-square btn-primary grow-0 me-2">
-                    <i class="icon-refresh-cw"></i>
-                </button>
-
-                <div class="ms-1 grow hidden lg:flex">
+                <div class="grow hidden lg:flex">
                     <PathBreadcrumb Path="@CurrentPath"
                                     OnClick="OnBreadcrumbClick"
                                     CustomClickLink="CustomBreadcrumbClickLink"/>
@@ -18,52 +14,7 @@
             </div>
         </div>
         <div class="col-span-1">
-            <div class="flex flex-row justify-end">
-                <Dropdown Align="right-0">
-                    <Activator>
-                        <button class="btn btn-secondary grow-0 me-2">
-                            <i class="icon-menu"></i>
-                            <span>Actions</span>
-                        </button>
-                    </Activator>
-                    <Content>
-                        @if (ShowMultiOperations)
-                        {
-                            for (var i = 0; i < MultiOperations.Length; i++)
-                            {
-                                var operation = MultiOperations[i];
-
-                                <button @onclick="_ => OnMultiOperationClicked.Invoke(operation)" type="button" class="dropdown-item">
-                                    <i class="@(operation.Icon) @(operation.ContextCss) text-lg me-1"></i>
-                                    @operation.Name
-                                </button>
-                            }
-                        }
-                        else
-                        {
-                            for (var i = 0; i < ToolbarOperations.Length; i++)
-                            {
-                                var operation = ToolbarOperations[i];
-
-                                <button @onclick="_ => OnToolbarClicked.Invoke(operation)" type="button" class="dropdown-item">
-                                    <i class="@(operation.Icon) @(operation.ToolbarCss) text-lg me-1"></i>
-                                    @operation.Name
-                                </button>
-                            }
-
-                            if (EnableUpload)
-                            {
-                                <label for="fm-upload" class="btn btn-primary ms-2">
-                                    <i class="icon-upload"></i>
-                                    Upload
-                                </label>
-                                <InputFile OnChange="HandleUploadAsync" class="hidden" id="fm-upload" multiple=""/>
-                            }
-                        }
-                    </Content>
-                </Dropdown>
-            </div>
-            <div class="hidden flex-row justify-end">
+            <div class="hidden md:flex flex-row justify-end">
                 @if (ShowMultiOperations)
                 {
                     for (var i = 0; i < MultiOperations.Length; i++)
@@ -99,6 +50,55 @@
                         <InputFile OnChange="HandleUploadAsync" class="hidden" id="fm-upload" multiple=""/>
                     }
                 }
+            </div>
+            
+            <div class="flex md:hidden flex-row justify-end">
+                <Dropdown Align="right-0">
+                    <Activator>
+                        <button class="btn btn-square btn-secondary">
+                            <i class="icon-menu"></i>
+                        </button>
+                    </Activator>
+                    <Content>
+                        @if (ShowMultiOperations)
+                        {
+                            for (var i = 0; i < MultiOperations.Length; i++)
+                            {
+                                var operation = MultiOperations[i];
+
+                                <button @onclick="_ => OnMultiOperationClicked.Invoke(operation)"
+                                        class="dropdown-item">
+                                    <i class="@operation.Icon"></i>
+                                    @operation.Name
+                                </button>
+                            }
+                        }
+                        else
+                        {
+                            for (var i = 0; i < ToolbarOperations.Length; i++)
+                            {
+                                var operation = ToolbarOperations[i];
+
+                                <button @onclick="_ => OnToolbarClicked.Invoke(operation)"
+                                        class="dropdown-item">
+                                    <i class="@operation.Icon"></i>
+                                    @operation.Name
+                                </button>
+                            }
+
+                            if (EnableUpload)
+                            {
+                                <div class="dropdown-item">
+                                    <label for="fm-upload" class="btn btn-primary ms-2">
+                                        <i class="icon-upload"></i>
+                                        Upload
+                                    </label>
+                                    <InputFile OnChange="HandleUploadAsync" class="hidden" id="fm-upload" multiple=""/>
+                                </div>
+                            }
+                        }
+                    </Content>
+                </Dropdown>
             </div>
         </div>
     </div>

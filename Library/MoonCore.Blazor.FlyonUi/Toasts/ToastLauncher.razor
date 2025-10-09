@@ -10,7 +10,15 @@
             <div class="pointer-events-auto w-full max-w-sm overflow-hidden rounded-lg bg-base-150 shadow-lg">
                 <div class="p-4">
                     <div class="flex items-center">
-                        @item.Component
+                        @{
+                            __builder.OpenComponent(0, item.ComponentType);
+                            __builder.AddComponentReferenceCapture(1, o =>
+                            {
+                                item.Component = (BaseToast)o;
+                                item.ConfigureAction?.Invoke();
+                            });
+                            __builder.CloseComponent();
+                        }
                     </div>
                 </div>
             </div>
@@ -34,17 +42,9 @@
     /// <param name="hideDelayMs">Time in milliseconds until the modal should hide again. Use <b>-1</b> to disable this. Default: <b>5s</b></param>
     /// <typeparam name="T">Type of the component</typeparam>
     /// <returns>Reference item to close the toast using <see cref="CloseAsync"/></returns>
-    public async Task<ToastReference> LaunchAsync<T>(Action<Dictionary<string, object>>? onConfigure = null, int hideDelayMs = 5000) where T : BaseToast
+    public async Task<ToastReference<T>> LaunchAsync<T>(Action<T>? onConfigure = null, int hideDelayMs = 5000) where T : BaseToast
     {
-        var item = new ToastReference();
-
-        item.Component = ComponentHelper.FromType<T>(buildAttr =>
-        {
-            buildAttr.Add("Launcher", this);
-            buildAttr.Add("Reference", item);
-            
-            onConfigure?.Invoke(buildAttr);
-        });
+        var item = new ToastReference<T>(typeof(T), onConfigure);
 
         if (hideDelayMs > 0)
         {
@@ -54,20 +54,20 @@
                 await CloseAsync(item);
             });
         }
-        
+
         Items.Add(item);
         await InvokeAsync(StateHasChanged);
 
         return item;
     }
-    
+
     /// <summary>
     /// Closes the provided toast
     /// </summary>
     /// <param name="reference">Reference item of the toast to close</param>
     public async Task CloseAsync(ToastReference reference)
     {
-        if(Items.Contains(reference))
+        if (Items.Contains(reference))
             Items.Remove(reference);
 
         await InvokeAsync(StateHasChanged);
