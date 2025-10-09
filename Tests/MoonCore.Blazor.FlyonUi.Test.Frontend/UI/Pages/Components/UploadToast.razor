@@ -1,0 +1,35 @@
+﻿@inherits MoonCore.Blazor.FlyonUi.Toasts.Components.BaseToast
+
+<div class="flex flex-col w-full pt-0.5">
+    <p class="text-sm font-medium text-base-content">
+        @Title
+    </p>
+    <p class="mt-1 text-xs text-base-content/80">
+        @Text
+    </p>
+    <div class="progress mt-1.5" role="progressbar" aria-valuenow="@Percent" aria-valuemin="0" aria-valuemax="100">
+        <div class="progress-bar progress-primary" style="width: @(Percent)%"></div>
+    </div>
+</div>
+
+@code
+{
+    /// <summary>
+    /// Title of the toast
+    /// </summary>
+    public string Title { get; set; }
+    
+    /// <summary>
+    /// Content of the toast
+    /// </summary>
+    public string Text { get; set; }
+
+    public int Percent { get; set; }
+
+    public async Task UpdateAsync(string text, int percent)
+    {
+        Text = text;
+        Percent = percent;
+        await InvokeAsync(StateHasChanged);
+    }
+}

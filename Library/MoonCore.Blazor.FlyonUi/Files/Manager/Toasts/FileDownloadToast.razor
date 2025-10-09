@@ -38,7 +38,7 @@
     /// <summary>
     /// Worker callback which should execute the actual task so the modal can hide when its finished
     /// </summary>
-    [Parameter] public Func<FileDownloadToast, Task> Callback { get; set; }
+    public Func<FileDownloadToast, Task> Callback { get; set; }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {

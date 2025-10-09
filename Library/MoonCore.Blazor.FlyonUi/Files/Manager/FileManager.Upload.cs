@@ -37,9 +37,9 @@ public partial class FileManager
 
     private async Task HandleFileUploadAsync(IBrowserFile[] files)
     {
-        await ToastService.LaunchAsync<FileUploadToast>(parameters =>
+        await ToastService.LaunchAsync<FileUploadToast>(toastRef =>
         {
-            parameters["Callback"] = async (FileUploadToast toast) =>
+            toastRef.Callback  = async (FileUploadToast toast) =>
             {
                 // We need this as the upload can run while the file manager is used to navigate elsewhere
                 var pwdAtUpload = new string(CurrentPath);
@@ -102,7 +102,7 @@ public partial class FileManager
 
     private async Task HandleFileDropAsync()
     {
-        await ToastService.LaunchAsync<FileUploadToast>(parameters => { parameters["Callback"] = UploadFromDropzoneAsync; });
+        await ToastService.LaunchAsync<FileUploadToast>(toastRef => toastRef.Callback = UploadFromDropzoneAsync);
     }
 
     private async Task UploadFromDropzoneAsync(FileUploadToast toast)

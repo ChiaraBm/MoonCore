@@ -60,7 +60,7 @@
     /// <summary>
     /// Worker callback which should execute the actual task so the modal can hide when its finished
     /// </summary>
-    [Parameter] public Func<FileUploadToast, Task> Callback { get; set; }
+    public Func<FileUploadToast, Task> Callback { get; set; }
 
     private TaskType CurrentTaskType = TaskType.Progressing;
 

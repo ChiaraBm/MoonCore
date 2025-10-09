@@ -42,9 +42,9 @@ public class DownloadOperation : IMultiFsOperation
             return;
         }
 
-        await ToastService.LaunchAsync<FileDownloadToast>(parameters =>
+        await ToastService.LaunchAsync<FileDownloadToast>(toastRef =>
         {
-            parameters["Callback"] = async (FileDownloadToast toast) =>
+            toastRef.Callback = async (toast) =>
             {
                 var failed = 0;
                 var succeeded = 0;

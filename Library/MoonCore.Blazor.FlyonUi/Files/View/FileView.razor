@@ -97,21 +97,21 @@
         return __builder =>
         {
             __builder.OpenElement(0, "tr");
-            __builder.AddAttribute(1, "class", "cursor-pointer");
 
             if (OnClick != null)
             {
-                __builder.AddAttribute(3, "onclick", EventCallback.Factory.Create(this, () => OnClick.Invoke(entry)));
-                __builder.AddEventPreventDefaultAttribute(4, "onclick", true);
+                __builder.AddAttribute(1, "class", "cursor-pointer");
+                __builder.AddAttribute(2, "onclick", EventCallback.Factory.Create(this, () => OnClick.Invoke(entry)));
+                __builder.AddEventPreventDefaultAttribute(3, "onclick", true);
             }
 
             if (OnContextMenu != null)
             {
-                __builder.AddAttribute(5, "oncontextmenu", EventCallback.Factory.Create(this, (MouseEventArgs args) =>OnContextMenu.Invoke(args, entry)));
-                __builder.AddEventPreventDefaultAttribute(6, "oncontextmenu", true);
+                __builder.AddAttribute(4, "oncontextmenu", EventCallback.Factory.Create(this, (MouseEventArgs args) =>OnContextMenu.Invoke(args, entry)));
+                __builder.AddEventPreventDefaultAttribute(5, "oncontextmenu", true);
             }
             
-            __builder.AddContent(7, fragment);
+            __builder.AddContent(6, fragment);
             
             __builder.CloseElement();
         };
