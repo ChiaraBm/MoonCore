@@ -1,0 +1,92 @@
+@using MoonCore.Blazor.FlyonUi.Test.Frontend.UI.Pages.Components
+@using MoonCore.Blazor.FlyonUi.Toasts
+@using MoonCore.Helpers
+
+@inject IJSRuntime JsRuntime
+@inject ToastService ToastService
+
+<label id="fu" for="fd"
+       class="bg-base-200/60 rounded-box flex flex-col justify-center border-2 border-base-content/20 border-dashed">
+    <div class="text-center cursor-pointer p-12 text-base-content/80">
+        <p>
+            <i class="icon-hard-drive-upload text-5xl"></i>
+        </p>
+        <p class="mt-3 text-sm">
+            Choose a file with a size up to 1GB. <br/>
+            Drop files & folders or <span class="link link-primary">browse your files</span>
+        </p>
+    </div>
+</label>
+
+<input id="fd" type="file" class="hidden" multiple="multiple"/>
+
+@code
+{
+    [Parameter] public long MaxSize { get; set; } = ByteConverter.FromMegaBytes(25).Bytes;
+    [Parameter] public required UploadCallback Callback { get; set; }
+
+    public delegate Task UploadCallback(string path, Stream stream, Func<int, Task> progress);
+
+    private ToastReference<UploadToast>? ToastReference;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender)
+            return;
+
+        await JsRuntime.InvokeVoidAsync("moonCoreFileUpload.init", "fu", "fd", DotNetObjectReference.Create(this));
+    }
+
+    [JSInvokable("Start")]
+    public async Task StartAsync(string name)
+    {
+        ToastReference = await ToastService.LaunchAsync<UploadToast>(toast =>
+        {
+            toast.Title = $"Uploading {name}";
+            toast.Text = "-";
+        }, hideDelayMs: -1);
+    }
+
+    [JSInvokable("Handle")]
+    public async Task HandleAsync(string path, IJSStreamReference reference)
+    {
+        if (reference.Length == 0)
+            return;
+
+        var fileName = Path.GetFileName(path);
+
+        if (reference.Length > MaxSize)
+        {
+            await ToastService.ErrorAsync(
+                $"Failed to upload {fileName}",
+                $"Exceeding maximum upload limit of {Formatter.FormatSize(MaxSize)}"
+            );
+
+            return;
+        }
+
+        var displayText = $"{Path.GetFileName(path)} - {Formatter.FormatSize(reference.Length)}";
+
+        await using var stream = await reference.OpenReadStreamAsync(MaxSize);
+
+        if (ToastReference != null)
+            await ToastReference.Instance.UpdateAsync(displayText, 0);
+
+        await Callback(path, stream, async (percent) =>
+        {
+            if (ToastReference != null)
+                await ToastReference.Instance.UpdateAsync(displayText, percent);
+        });
+    }
+
+    [JSInvokable("Stop")]
+    public async Task StopAsync()
+    {
+        if (ToastReference != null)
+            await ToastService.CloseAsync(ToastReference);
+
+        ToastReference = null;
+
+        await ToastService.SuccessAsync("Upload completed");
+    }
+}

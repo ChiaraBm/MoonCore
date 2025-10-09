@@ -1,98 +1,22 @@
 ﻿@page "/upload"
-
-@using MoonCore.Blazor.FlyonUi.Test.Frontend.UI.Pages.Components
-@using MoonCore.Blazor.FlyonUi.Toasts
 @using MoonCore.Helpers
 
-@inject IJSRuntime JsRuntime
-@inject ToastService ToastService
-
-<label id="fu" for="fd" class="bg-base-200/60 rounded-box flex flex-col justify-center border-2 border-base-content/20 border-dashed">
-    <div class="text-center cursor-pointer p-12 text-base-content/80">
-        <p>
-            <i class="icon-hard-drive-upload text-5xl"></i>
-        </p>
-        <p class="mt-3 text-sm">
-            Choose a file with a size up to 1GB. <br />
-            Drop files & folders or <span class="link link-primary">browse your files</span>
-        </p>
-    </div>
-</label>
-
-<input id="fd" type="file" class="hidden" multiple="multiple"/>
-
-<div class="mt-10">
-    <div class="mb-2">
-        @FileName
-    </div>
-    <div class="progress" role="progressbar" aria-valuenow="@Percent" aria-valuemin="0" aria-valuemax="100">
-        <div class="progress-bar progress-primary" style="width: @(Percent)%"></div>
-    </div>
-</div>
+<UploadZone MaxSize="ByteConverter.FromGigaBytes(5).Bytes" Callback="HandleAsync"/>
 
 @code
 {
-    private int Percent = 0;
-    private string FileName;
-
-    private ToastReference<UploadToast>? ToastReference;
-    
-    protected override async Task OnAfterRenderAsync(bool firstRender)
+    private async Task HandleAsync(string path, Stream stream, Func<int, Task> progress)
     {
-        if(!firstRender)
-            return;
-
-        await JsRuntime.InvokeVoidAsync("moonCoreFileUpload.registerDropHandler", "fu", "fd", DotNetObjectReference.Create(this));
-    }
-
-    [JSInvokable("Start")]
-    public async Task StartAsync(string name)
-    {
-        ToastReference = await ToastService.LaunchAsync<UploadToast>(toast =>
-        {
-            toast.Title = $"Uploading {name}";
-            toast.Text = "-";
-        }, hideDelayMs: -1);
-    }
-
-    [JSInvokable("Handle")]
-    public async Task HandleAsync(string path, IJSStreamReference reference)
-    {
-        if (reference.Length == 0)
-            return;
-
-        FileName = $"{Path.GetFileName(path)} - {Formatter.FormatSize(reference.Length)}";
-
-        await using var stream = await reference.OpenReadStreamAsync(ByteConverter.FromGigaBytes(5).Bytes);
-            
-        if (ToastReference != null)
-            await ToastReference.Instance.UpdateAsync(FileName, 0);
-
         var cache = new byte[ByteConverter.FromMegaBytes(5).Bytes];
-
-
-        while (stream.Position != reference.Length)
+        
+        while (stream.Position != stream.Length)
         {
             _ = await stream.ReadAsync(cache, 0, cache.Length);
 
-            Console.WriteLine($"D: {stream.Position}/{reference.Length}");
-            Percent = (int)Math.Round(stream.Position / (float)stream.Length * 100f);
+            Console.WriteLine($"D: {stream.Position}/{stream.Length}");
+            var percent = (int)Math.Round(stream.Position / (float)stream.Length * 100f);
 
-            if (ToastReference != null)
-                await ToastReference.Instance.UpdateAsync(FileName, Percent);
-
-            await InvokeAsync(StateHasChanged);
+            await progress.Invoke(percent);
         }
-    }
-
-    [JSInvokable("Stop")]
-    public async Task StopAsync()
-    {
-        if(ToastReference != null)
-            await ToastService.CloseAsync(ToastReference);
-        
-        ToastReference = null;
-
-        await ToastService.SuccessAsync("Upload completed");
     }
 }
