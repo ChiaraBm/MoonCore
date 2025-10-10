@@ -1,5 +1,4 @@
 ﻿@using MoonCore.Blazor.FlyonUi.Files.View
-@using MoonCore.Blazor.FlyonUi.Files.Manager.Partials
 @using MoonCore.Blazor.FlyonUi.Toasts
 @using MoonCore.Blazor.FlyonUi.Components
 @using MoonCore.Blazor.FlyonUi.Files.Manager.Abstractions
@@ -14,21 +13,96 @@
 
 @if (ShowOpenWindow)
 {
+    @* Open Window *@
+    
     <div>
         @OpenWindow
     </div>
 }
 else
 {
-    <FileManagerHeader CurrentPath="@CurrentPath"
-                       OnBreadcrumbClick="SetPathAsync"
-                       OnHomeClick="@(() => SetPathAsync("/"))"
-                       OnRefreshClick="() => FileView.RefreshAsync()"
-                       ShowMultiOperations="@(SelectedEntries.Count > 0)"
-                       MultiOperations="MultiFsOperations"
-                       OnMultiOperationClicked="RunSelectionOperationAsync"
-                       ToolbarOperations="ToolbarOperations"
-                       OnToolbarClicked="RunToolbarOperationAsync"/>
+    @* Header *@
+    
+    <div class="card card-body p-2">
+        <div class="grid grid-cols-1 xl:grid-cols-2">
+            <div class="col-span-1 hidden xl:flex">
+                <div class="flex flex-row justify-start w-full">
+                    <PathBreadcrumb Path="@CurrentPath"
+                                    OnClick="SetPathAsync"/>
+                </div>
+            </div>
+            <div class="col-span-1">
+                <div class="hidden lg:flex flex-row justify-end">
+                    @if (SelectedEntries.Count > 0)
+                    {
+                        for (var i = 0; i < MultiFsOperations.Length; i++)
+                        {
+                            var operation = MultiFsOperations[i];
+
+                            <button @onclick="_ => RunMultiContextOperationAsync(operation)"
+                                    class="btn @(operation.ToolbarCss) @(i != MultiFsOperations.Length - 1 ? "me-2" : "")">
+                                <i class="@operation.Icon"></i>
+                                @operation.Name
+                            </button>
+                        }
+                    }
+                    else
+                    {
+                        for (var i = 0; i < ToolbarOperations.Length; i++)
+                        {
+                            var operation = ToolbarOperations[i];
+
+                            <button @onclick="_ => RunToolbarOperationAsync(operation)"
+                                    class="btn @(operation.ToolbarCss) @(i != ToolbarOperations.Length - 1 ? "me-2" : "")">
+                                <i class="@operation.Icon"></i>
+                                @operation.Name
+                            </button>
+                        }
+                    }
+                </div>
+
+                <div class="flex lg:hidden flex-row justify-end">
+                    <Dropdown Align="right-0">
+                        <Activator>
+                            <button class="btn btn-square btn-secondary">
+                                <i class="icon-menu"></i>
+                            </button>
+                        </Activator>
+                        <Content>
+                            @if (SelectedEntries.Count > 0)
+                            {
+                                for (var i = 0; i < MultiFsOperations.Length; i++)
+                                {
+                                    var operation = MultiFsOperations[i];
+
+                                    <button @onclick="_ => RunMultiContextOperationAsync(operation)"
+                                            class="dropdown-item">
+                                        <i class="@operation.Icon"></i>
+                                        @operation.Name
+                                    </button>
+                                }
+                            }
+                            else
+                            {
+                                for (var i = 0; i < ToolbarOperations.Length; i++)
+                                {
+                                    var operation = ToolbarOperations[i];
+
+                                    <button @onclick="_ => RunToolbarOperationAsync(operation)"
+                                            class="dropdown-item">
+                                        <i class="@operation.Icon"></i>
+                                        @operation.Name
+                                    </button>
+                                }
+                            }
+                        </Content>
+                    </Dropdown>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    @* File List *@
 
     <div class="mt-5">
         <FileView @ref="FileView" Load="LoadAsync" ShowDate="true" ShowSize="true" OnClick="OnClick"

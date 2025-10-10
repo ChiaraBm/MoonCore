@@ -43,7 +43,7 @@
 
         if (ShowSize)
         {
-            <th class="hidden md:table-cell">
+            <th class="hidden lg:table-cell">
                 <div class="me-1">
                     Size
                 </div>
@@ -52,7 +52,7 @@
 
         if (ShowDate)
         {
-            <th class="hidden md:table-cell">
+            <th class="hidden lg:table-cell">
                 <div class="me-1">
                     Updated at
                 </div>
@@ -90,7 +90,7 @@
 
         if (ShowSize)
         {
-            <td class="hidden md:table-cell">
+            <td class="hidden lg:table-cell">
                 @if (item.IsFolder)
                 {
                     <span>-</span>
@@ -106,7 +106,7 @@
 
         if (ShowDate)
         {
-            <td class="hidden md:table-cell">
+            <td class="hidden lg:table-cell">
                 <span>
                     @Formatter.FormatDate(item.UpdatedAt.DateTime)
                 </span>
