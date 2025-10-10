@@ -1,5 +1,8 @@
 ﻿namespace MoonCore.Blazor.FlyonUi.Files.Manager;
 
+/// <summary>
+/// Base file access providing the <see cref="FileManager"/> access to its content and performing operations on it
+/// </summary>
 public interface IFsAccess
 {
     /// <summary>

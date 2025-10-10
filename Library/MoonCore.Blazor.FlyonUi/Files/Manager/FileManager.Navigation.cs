@@ -1,9 +1,15 @@
-﻿using MoonCore.Helpers;
+﻿using Microsoft.AspNetCore.Components;
+using MoonCore.Helpers;
 
 namespace MoonCore.Blazor.FlyonUi.Files.Manager;
 
 public partial class FileManager
 {
+    /// <summary>
+    /// Path the instance uses as the working directory
+    /// </summary>
+    
+    [Parameter]
     public string CurrentPath { get; set; } = "/";
     
     private async Task<IEnumerable<FsEntry>> LoadAsync()

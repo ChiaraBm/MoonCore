@@ -44,6 +44,7 @@ public partial class FileManager
         await InvokeAsync(StateHasChanged);
     }
 
+    /// <inheritdoc />
     public async Task CloseOpenScreenAsync()
     {
         ShowOpenWindow = false;

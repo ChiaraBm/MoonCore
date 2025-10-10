@@ -1,20 +1,20 @@
 ﻿namespace MoonCore.Blazor.FlyonUi.Files.View;
 
+/// <summary>
+/// Helper for displaying the correct icons for files by analyzing the extension
+/// </summary>
 public static class FileIconHelper
 {
     /// <summary>
     /// Returns a lucide icon matching the type of the file by extension matching
     /// </summary>
     /// <param name="fileName">File name to get the icon for</param>
-    /// <returns></returns>
+    /// <returns>Lucide icon to use for this file name</returns>
     public static string GetByName(string fileName)
     {
         string identifier;
 
-        if (fileName.Contains('.'))
-            identifier = Path.GetExtension(fileName).Remove(0, 1);
-        else
-            identifier = fileName;
+        identifier = Path.GetExtension(fileName).TrimStart('.');
         
         return identifier switch
         {

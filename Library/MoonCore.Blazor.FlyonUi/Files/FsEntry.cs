@@ -1,5 +1,8 @@
 ﻿namespace MoonCore.Blazor.FlyonUi.Files;
 
+/// <summary>
+/// Represents a file system entry in a file system withing a requested path
+/// </summary>
 public record FsEntry
 {
     /// <summary>

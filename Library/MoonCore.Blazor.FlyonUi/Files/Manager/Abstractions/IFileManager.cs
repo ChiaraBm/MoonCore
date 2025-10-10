@@ -2,7 +2,7 @@
 
 /// <summary>
 /// Use this interface in a file operation to invoke actions like <see cref="RefreshAsync"/> on the file manager
-/// during the runtime of the operation
+/// during the runtime of an operation
 /// </summary>
 public interface IFileManager
 {
