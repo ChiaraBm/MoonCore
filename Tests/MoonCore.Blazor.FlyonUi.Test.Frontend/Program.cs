@@ -35,7 +35,6 @@ builder.Services.AddScoped<ModalService>();
 builder.Services.AddScoped<AlertService>();
 builder.Services.AddScoped<ToastService>();
 builder.Services.AddScoped<CodeEditorService>();
-builder.Services.AddScoped<DropHandlerService>();
 builder.Services.AddScoped<DownloadService>();
 builder.Services.AddScoped<GlobalErrorService>();
 builder.Services.AddScoped<DrawerService>();

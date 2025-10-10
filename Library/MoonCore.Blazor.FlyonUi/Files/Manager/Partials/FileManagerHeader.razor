@@ -40,15 +40,6 @@
                             @operation.Name
                         </button>
                     }
-
-                    if (EnableUpload)
-                    {
-                        <label for="fm-upload" class="btn btn-primary ms-2">
-                            <i class="icon-upload"></i>
-                            Upload
-                        </label>
-                        <InputFile OnChange="HandleUploadAsync" class="hidden" id="fm-upload" multiple=""/>
-                    }
                 }
             </div>
             
@@ -84,17 +75,6 @@
                                     <i class="@operation.Icon"></i>
                                     @operation.Name
                                 </button>
-                            }
-
-                            if (EnableUpload)
-                            {
-                                <div class="dropdown-item">
-                                    <label for="fm-upload" class="btn btn-primary ms-2">
-                                        <i class="icon-upload"></i>
-                                        Upload
-                                    </label>
-                                    <InputFile OnChange="HandleUploadAsync" class="hidden" id="fm-upload" multiple=""/>
-                                </div>
                             }
                         }
                     </Content>
@@ -160,21 +140,4 @@
     /// Callback which gets invoked when the user clicked on a toolbar operation button
     /// </summary>
     [Parameter] public Func<IToolbarOperation, Task> OnToolbarClicked { get; set; }
-    
-    /// <summary>
-    /// Toggles whether the user should be shown a file upload button
-    /// </summary>
-    [Parameter] public bool EnableUpload { get; set; }
-
-    private async Task HandleUploadAsync(InputFileChangeEventArgs eventArgs)
-    {
-        if (eventArgs.FileCount == 0)
-            return;
-
-        var files = eventArgs.FileCount == 1
-            ? [eventArgs.File]
-            : eventArgs.GetMultipleFiles().ToArray();
-
-        await OnFileSelected.Invoke(files);
-    }
 }

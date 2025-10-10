@@ -1,0 +1,50 @@
+﻿@using MoonCore.Blazor.FlyonUi.Files.Drop
+@inherits MoonCore.Blazor.FlyonUi.Modals.BaseModal
+
+<div class="p-5">
+    <div class="flex items-center gap-4">
+        <div class="avatar avatar-placeholder max-sm:hidden">
+            <div class="border-base-content/20 rounded-box w-13 border-1">
+                <span class="icon-hard-drive-upload text-xl"></span>
+            </div>
+        </div>
+        <div class="space-y-1">
+            <h3 class="text-base-content text-2xl font-semibold">Upload content</h3>
+            <p class="text-base-content/80">Upload files and folders to this location</p>
+        </div>
+    </div>
+    <div class="mt-5">
+        <UploadZone MaxSize="MaxSize" Callback="HandleUploadAsync" OnStarted="OnStart" OnCompleted="OnCompleted"/>
+    </div>
+    <div class="mt-5 flex justify-end">
+        <button @onclick="HideAsync" type="button" class="btn btn-secondary me-2">
+            Close
+        </button>
+    </div>
+</div>
+
+
+@code
+{
+    [Parameter] public long MaxSize { get; set; }
+    [Parameter] public Func<string, Stream, Func<int, Task>, Task> Callback { get; set; }
+    [Parameter] public Func<Task>? OnStarted { get; set; }
+    [Parameter] public Func<Task>? OnCompleted { get; set; }
+
+    private bool IsHidden = false;
+
+    private async Task OnStart()
+    {
+        if (!IsHidden)
+        {
+            IsHidden = true;
+            await HideAsync();
+        }
+
+        if (OnStarted != null)
+            await OnStarted.Invoke();
+    }
+
+    private Task HandleUploadAsync(string path, Stream stream, Func<int, Task> updateProgress)
+        => Callback.Invoke(path, stream, updateProgress);
+}

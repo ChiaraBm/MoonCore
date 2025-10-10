@@ -1,6 +1,4 @@
-﻿@using Microsoft.Extensions.Logging
-@using MoonCore.Blazor.FlyonUi.Files.View
-@using MoonCore.Blazor.FlyonUi.DataTables
+﻿@using MoonCore.Blazor.FlyonUi.Files.View
 @using MoonCore.Blazor.FlyonUi.Files.Manager.Partials
 @using MoonCore.Blazor.FlyonUi.Toasts
 @using MoonCore.Blazor.FlyonUi.Components
@@ -9,12 +7,9 @@
 @using MoonCore.Blazor.FlyonUi.Grid.Rows
 
 @inject ToastService ToastService
-@inject ILogger<FileManager> Logger
-@inject DropHandlerService DropHandlerService
 
 @inject IServiceProvider ServiceProvider
 
-@implements IAsyncDisposable
 @implements IFileManager
 
 @if (ShowOpenWindow)
@@ -29,13 +24,11 @@ else
                        OnBreadcrumbClick="SetPathAsync"
                        OnHomeClick="@(() => SetPathAsync("/"))"
                        OnRefreshClick="() => FileView.RefreshAsync()"
-                       OnFileSelected="HandleFileUploadAsync"
                        ShowMultiOperations="@(SelectedEntries.Count > 0)"
                        MultiOperations="MultiFsOperations"
                        OnMultiOperationClicked="RunSelectionOperationAsync"
                        ToolbarOperations="ToolbarOperations"
-                       OnToolbarClicked="RunToolbarOperationAsync"
-                       EnableUpload="EnableUpload"/>
+                       OnToolbarClicked="RunToolbarOperationAsync"/>
 
     <div class="mt-5">
         <FileView @ref="FileView" Load="LoadAsync" ShowDate="true" ShowSize="true" OnClick="OnClick"
@@ -116,12 +109,6 @@ else
     public required Action<FileManagerOptions> OnConfigure { get; set; }
 
     /// <summary>
-    /// Toggles whether to allow the user to upload files/folders
-    /// </summary>
-    [Parameter]
-    public bool EnableUpload { get; set; } = true;
-
-    /// <summary>
     /// Current active file view component
     /// </summary>
     public FileView FileView { get; private set; }
@@ -133,7 +120,7 @@ else
     private IMultiFsOperation[] MultiFsOperations;
     private IToolbarOperation[] ToolbarOperations;
 
-    private FileManagerOptions Options;
+    public FileManagerOptions Options { get; private set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -159,26 +146,8 @@ else
             .Where(x => x.CheckCompatability(FsAccess, this))
             .OrderByDescending(x => x.Order)
             .ToArray();
-
-        if (EnableUpload)
-            await InitializeUploadAsync();
     }
 
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        if (!firstRender)
-            return;
-
-        if (EnableUpload)
-            await LateInitializeUploadAsync();
-    }
-
-    public async ValueTask DisposeAsync()
-    {
-        if (EnableUpload)
-            await DisposeUploadAsync();
-    }
-
-    public Task RefreshAsync()
-        => FileView.RefreshAsync();
+    public Task RefreshAsync(bool silent = false)
+        => FileView.RefreshAsync(silent: silent);
 }

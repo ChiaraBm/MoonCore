@@ -7,10 +7,17 @@
 public interface IFileManager
 {
     /// <summary>
+    /// Options the current file manager instance has been configured with
+    /// </summary>
+    public FileManagerOptions Options { get; }
+    
+    /// <summary>
     /// Refreshes the file list by fetching it from the <see cref="IFsAccess"/>
     /// </summary>
+    /// <param name="silent">Whether to show a loading indicator while refreshing.
+    /// If set to true the data will just appear for the user without indication if it actually loads</param>
     /// <returns></returns>
-    public Task RefreshAsync();
+    public Task RefreshAsync(bool silent = false);
     
     /// <summary>
     /// Closes the current screen opened by an <see cref="IFsOpenOperation"/>

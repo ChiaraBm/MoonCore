@@ -1,11 +1,12 @@
 ﻿@page "/upload"
+@using MoonCore.Blazor.FlyonUi.Files.Drop
 @using MoonCore.Helpers
 
 <UploadZone MaxSize="ByteConverter.FromGigaBytes(5).Bytes" Callback="HandleAsync"/>
 
 @code
 {
-    private async Task HandleAsync(string path, Stream stream, Func<int, Task> progress)
+    private async Task HandleAsync(string path, Stream stream, Func<int, Task> updateProgress)
     {
         var cache = new byte[ByteConverter.FromMegaBytes(5).Bytes];
         
@@ -16,7 +17,7 @@
             Console.WriteLine($"D: {stream.Position}/{stream.Length}");
             var percent = (int)Math.Round(stream.Position / (float)stream.Length * 100f);
 
-            await progress.Invoke(percent);
+            await updateProgress.Invoke(percent);
         }
     }
 }
