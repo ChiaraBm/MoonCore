@@ -187,6 +187,11 @@ else
     /// </summary>
     public FileView FileView { get; private set; }
 
+    /// <summary>
+    /// Options the file manager has been configured with. Don't modify any values here
+    /// </summary>
+    public FileManagerOptions Options { get; private set; }
+    
     private ContextMenu ContextMenu;
 
     private IFsOpenOperation[] OpenOperations;
@@ -194,9 +199,7 @@ else
     private IMultiFsOperation[] MultiFsOperations;
     private IToolbarOperation[] ToolbarOperations;
 
-    public FileManagerOptions Options { get; private set; }
-
-    protected override async Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
         Options = new FileManagerOptions(ServiceProvider);
         OnConfigure.Invoke(Options);
@@ -222,6 +225,12 @@ else
             .ToArray();
     }
 
+    /// <summary>
+    /// Refreshes the file list of the manager instance
+    /// </summary>
+    /// <param name="silent">Whether to show a loading indicator while refreshing.
+    /// If set to true the data will just appear for the user without indication if it actually loads</param>
+    /// <returns></returns>
     public Task RefreshAsync(bool silent = false)
         => FileView.RefreshAsync(silent: silent);
 }

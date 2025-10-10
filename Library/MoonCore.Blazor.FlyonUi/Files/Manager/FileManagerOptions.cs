@@ -4,6 +4,10 @@ using MoonCore.Helpers;
 
 namespace MoonCore.Blazor.FlyonUi.Files.Manager;
 
+/// <summary>
+/// Options to configure the file manager in its <see cref="FileManager.OnConfigure"/> callback.
+/// Used for resolving and registering operations and changing general settings
+/// </summary>
 public class FileManagerOptions
 {
     /// <summary>
@@ -43,7 +47,7 @@ public class FileManagerOptions
 
     private readonly IServiceProvider ServiceProvider;
 
-    public FileManagerOptions(IServiceProvider serviceProvider)
+    internal FileManagerOptions(IServiceProvider serviceProvider)
     {
         ServiceProvider = serviceProvider;
     }

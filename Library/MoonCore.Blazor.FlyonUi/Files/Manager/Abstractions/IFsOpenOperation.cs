@@ -2,6 +2,10 @@
 
 namespace MoonCore.Blazor.FlyonUi.Files.Manager.Abstractions;
 
+/// <summary>
+/// Defines an operation with which a file can be opened. File manager automatically finds the correct open operation
+/// using the <see cref="Filter"/> and <see cref="Order"/>
+/// </summary>
 public interface IFsOpenOperation
 {
     /// <summary>

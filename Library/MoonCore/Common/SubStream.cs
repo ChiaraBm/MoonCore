@@ -1,5 +1,10 @@
 ﻿namespace MoonCore.Common;
 
+/// <summary>
+/// Allows you to access to part of a stream as a separate stream. Useful for chunked uploading from a stream
+/// where every chunk you upload is just a SubStream instance. Async and sync operations are supported. Write
+/// operations are not supported
+/// </summary>
 public class SubStream : Stream
 {
     private readonly Stream InnerStream;

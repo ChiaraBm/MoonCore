@@ -22,11 +22,29 @@
 
 @code
 {
+    /// <summary>
+    /// Maximum allows file size. Will be shown to the user and files bigger than that size will be rejected
+    /// </summary>
     [Parameter] public long MaxSize { get; set; } = ByteConverter.FromMegaBytes(25).Bytes;
+    
+    /// <summary>
+    /// Callback used to handle the uploading of the files received by the interop calls
+    /// </summary>
     [Parameter] public required UploadCallback Callback { get; set; }
+    
+    /// <summary>
+    /// <b>Optional: </b> Callback when the interop starts a transfer
+    /// </summary>
     [Parameter] public Func<Task>? OnStarted { get; set; }
+    
+    /// <summary>
+    /// <b>Optional: </b> Callback when the interop completes a transfer
+    /// </summary>
     [Parameter] public Func<Task>? OnCompleted { get; set; }
 
+    /// <summary>
+    /// Represents a callback used for delegating the upload parameters to the responsible implementation
+    /// </summary>
     public delegate Task UploadCallback(string path, Stream stream, Func<int, Task> updateProgress);
 
     private ToastReference<UploadToast>? ToastReference;

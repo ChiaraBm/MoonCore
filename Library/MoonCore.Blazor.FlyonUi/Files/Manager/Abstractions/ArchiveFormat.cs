@@ -5,6 +5,13 @@
 /// </summary>
 public record ArchiveFormat
 {
+    /// <summary>
+    /// Creates a new instance of the archive format
+    /// </summary>
+    /// <param name="identifier">Internally used id to specify which archive format to use</param>
+    /// <param name="extensions">Array of file extensions the archive format supports. The file extensions <b>must not</b> start with a dot</param>
+    /// <param name="displayName">Display name of the format. This will be shown to the user</param>
+    /// <exception cref="ArgumentException">Throws when no extensions have been provided</exception>
     public ArchiveFormat(string identifier, string[] extensions, string displayName)
     {
         if (extensions.Length == 0)
