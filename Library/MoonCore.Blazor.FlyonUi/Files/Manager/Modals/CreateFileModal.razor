@@ -38,12 +38,12 @@
     /// <summary>
     /// Specifies the initial name of the file in the modal
     /// </summary>
-    [Parameter] public string InitialName { get; set; } = "";
+    public string InitialName { get; set; } = "";
     
     /// <summary>
     /// Callback which will be invoked when the user specified a file name
     /// </summary>
-    [Parameter] public required Func<string, Task> OnSubmit { get; set; }
+    public required Func<string, Task> OnSubmit { get; set; }
 
     private FormData Form = new();
     private HandleForm HandleForm;

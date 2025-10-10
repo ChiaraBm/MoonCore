@@ -20,7 +20,17 @@
              style="z-index: @(i + 101)">
             <div class="modal-dialog overlay-open:opacity-100 overlay-open:duration-50 @modal.Size">
                 <div class="modal-content overflow-y-auto">
-                    @modal.Component
+                    @{
+                        __builder.OpenComponent(0, modal.ComponentType);
+                        __builder.AddComponentParameter(1, "Launcher", this);
+                        __builder.AddComponentParameter(2, "Reference", modal);
+                        __builder.AddComponentReferenceCapture(3, o =>
+                        {
+                            modal.Component = (BaseModal)o;
+                            modal.ConfigureAction?.Invoke();
+                        });
+                        __builder.CloseComponent();
+                    }
                 </div>
             </div>
         </div>
@@ -34,7 +44,7 @@
 
 @code
 {
-    private ConcurrentList<ModalReference> Modals = new();
+    private readonly ConcurrentList<ModalReference> Modals = new();
 
     protected override void OnInitialized()
     {
@@ -49,21 +59,13 @@
     /// <param name="allowUnfocusHide"><b>Optional:</b>  Toggles if clicking outside the modal (onto the backdrop) will hide the modal</param>
     /// <typeparam name="T">Type of the component</typeparam>
     /// <returns>ModalItem to close the modal using <see cref="CloseAsync"/></returns>
-    public async Task<ModalReference> LaunchAsync<T>(Action<Dictionary<string, object>>? onConfigure = null, string size = "max-w-lg", bool allowUnfocusHide = false) where T : BaseModal
+    public async Task<ModalReference<T>> LaunchAsync<T>(Action<T>? onConfigure = null, string size = "max-w-lg", bool allowUnfocusHide = false) where T : BaseModal
     {
-        var item = new ModalReference()
+        var item = new ModalReference<T>(typeof(T), onConfigure)
         {
             Size = size,
             AllowUnfocusHide = allowUnfocusHide
         };
-
-        item.Component = ComponentHelper.FromType<T>(buildAttr =>
-        {
-            buildAttr.Add("Launcher", this);
-            buildAttr.Add("Reference", item);
-
-            onConfigure?.Invoke(buildAttr);
-        });
 
         Modals.Add(item);
         await InvokeAsync(StateHasChanged);

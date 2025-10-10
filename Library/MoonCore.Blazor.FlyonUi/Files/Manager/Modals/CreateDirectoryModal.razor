@@ -38,12 +38,12 @@
      /// <summary>
     /// Define the default value of the new directory
     /// </summary>
-    [Parameter] public string InitialName { get; set; } = "";
+    public string InitialName { get; set; } = "";
     
     /// <summary>
     /// Callback which will be invoked when the user specified a directory name
     /// </summary>
-    [Parameter] public required Func<string, Task> OnSubmit { get; set; }
+    public required Func<string, Task> OnSubmit { get; set; }
 
     private FormData Form = new();
     private HandleForm HandleForm;

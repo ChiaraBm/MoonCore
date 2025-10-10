@@ -4,7 +4,7 @@ public class ModalService
 {
     private ModalLauncher ModalLauncher;
     
-    public void SetLauncher(ModalLauncher launcher) => ModalLauncher = launcher;
+    internal void SetLauncher(ModalLauncher launcher) => ModalLauncher = launcher;
 
     /// <summary>
     /// Launch the provided component inside a modal container
@@ -14,8 +14,8 @@ public class ModalService
     /// <param name="allowUnfocusHide"><b>Optional:</b>  Toggles if clicking outside the modal (onto the backdrop) will hide the modal</param>
     /// <typeparam name="T">Type of the component</typeparam>
     /// <returns>ModalItem to close the modal using <see cref="CloseAsync"/></returns>
-    public Task<ModalReference> LaunchAsync<T>(Action<Dictionary<string, object>>? onConfigure = null, string size = "max-w-lg", bool allowUnfocusHide = false) where T : BaseModal
-        => ModalLauncher.LaunchAsync<T>(onConfigure, size, allowUnfocusHide);
+    public Task<ModalReference<T>> LaunchAsync<T>(Action<T>? onConfigure = null, string size = "max-w-lg", bool allowUnfocusHide = false) where T : BaseModal
+        => ModalLauncher.LaunchAsync(onConfigure, size, allowUnfocusHide);
 
     /// <summary>
     /// Closes the provided modal

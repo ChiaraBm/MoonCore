@@ -1,4 +1,3 @@
-using MoonCore.Blazor.FlyonUi.Alerts.Components;
 using MoonCore.Blazor.FlyonUi.Modals;
 
 namespace MoonCore.Blazor.FlyonUi.Alerts;
@@ -17,28 +16,56 @@ public class AlertService
     /// </summary>
     /// <param name="title">Title of the modal</param>
     /// <param name="text">Content of the modal</param>
-    public Task SuccessAsync(string title, string text) => LaunchAsync<SuccessAlert>(title, text);
-    
+    public async Task SuccessAsync(string title, string text)
+    {
+        await ModalService.LaunchAsync<SuccessAlert>(alert =>
+        {
+            alert.Title = title;
+            alert.Text = text;
+        });
+    }
+
     /// <summary>
     /// Launches an instance of the default info modal with the provided content
     /// </summary>
     /// <param name="title">Title of the modal</param>
     /// <param name="text">Content of the modal</param>
-    public Task InfoAsync(string title, string text) => LaunchAsync<InfoAlert>(title, text);
-    
+    public async Task InfoAsync(string title, string text)
+    {
+        await ModalService.LaunchAsync<InfoAlert>(alert =>
+        {
+            alert.Title = title;
+            alert.Text = text;
+        });
+    }
+
     /// <summary>
     /// Launches an instance of the default warning modal with the provided content
     /// </summary>
     /// <param name="title">Title of the modal</param>
     /// <param name="text">Content of the modal</param>
-    public Task WarningAsync(string title, string text) => LaunchAsync<WarningAlert>(title, text);
-    
+    public async Task WarningAsync(string title, string text)
+    {
+        await ModalService.LaunchAsync<WarningAlert>(alert =>
+        {
+            alert.Title = title;
+            alert.Text = text;
+        });
+    }
+
     /// <summary>
     /// Launches an instance of the default error modal with the provided content
     /// </summary>
     /// <param name="title">Title of the modal</param>
     /// <param name="text">Content of the modal</param>
-    public Task ErrorAsync(string title, string text) => LaunchAsync<ErrorAlert>(title, text);
+    public async Task ErrorAsync(string title, string text)
+    {
+        await ModalService.LaunchAsync<ErrorAlert>(alert =>
+        {
+            alert.Title = title;
+            alert.Text = text;
+        });
+    }
 
     /// <summary>
     /// Launches a confirmation modal for a dangerous operation
@@ -48,20 +75,11 @@ public class AlertService
     /// <param name="confirmAction">Callback which will be invoked when the user confirms the action</param>
     public async Task ConfirmDangerAsync(string title, string text, Func<Task> confirmAction)
     {
-        await ModalService.LaunchAsync<ConfirmDangerAlert>(buildAttr =>
+        await ModalService.LaunchAsync<ConfirmDangerAlert>(alert =>
         {
-            buildAttr.Add("Title", title);
-            buildAttr.Add("Text", text);
-            buildAttr.Add("ConfirmAction", confirmAction);
+            alert.Title = title;
+            alert.Text = text;
+            alert.ConfirmAction = confirmAction;
         });
-    }
-
-    private async Task LaunchAsync<T>(string title, string text) where T : BaseModal
-    {
-        await ModalService.LaunchAsync<T>(buildAttr =>
-        {
-            buildAttr.Add("Title", title);
-            buildAttr.Add("Text", text);
-        }, allowUnfocusHide: true);
     }
 }

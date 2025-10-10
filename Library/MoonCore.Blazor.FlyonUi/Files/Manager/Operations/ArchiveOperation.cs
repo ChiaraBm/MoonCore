@@ -30,9 +30,11 @@ public class ArchiveOperation : IMultiFsOperation
         Logger = logger;
     }
 
+    /// <inheritdoc />
     public bool CheckCompatability(IFsAccess access, IFileManager fileManager)
         => access is IArchiveAccess;
 
+    /// <inheritdoc />
     public async Task ExecuteAsync(string workingDir, FsEntry[] files, IFsAccess fsAccess, IFileManager fileManager)
     {
         var archiveAccess = fsAccess as IArchiveAccess;
@@ -40,10 +42,11 @@ public class ArchiveOperation : IMultiFsOperation
         if (archiveAccess == null)
             return;
 
-        await ModalService.LaunchAsync<CreateArchiveModal>(parameters =>
+        await ModalService.LaunchAsync<CreateArchiveModal>(modal =>
         {
-            parameters["Formats"] = archiveAccess.ArchiveFormats;
-            parameters["OnSubmit"] = async (string name, ArchiveFormat format) =>
+            modal.Formats = archiveAccess.ArchiveFormats;
+            
+            modal.OnSubmit = async (name, format) =>
             {
                 await ToastService.ProgressAsync(
                     "Creating archive",
