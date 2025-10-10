@@ -125,12 +125,17 @@ public class FsController : Controller
     public async Task<IActionResult> Combine([FromBody] FsCombineRequest request)
     {
         var dest = HandleRawPath(request.Destination);
+        var parentDir = Path.GetDirectoryName(dest);
+            
+        if(!string.IsNullOrWhiteSpace(parentDir))
+            Directory.CreateDirectory(parentDir);
+        
         await using var fs = System.IO.File.Open(dest, FileMode.Create, FileAccess.ReadWrite, FileShare.Read);
 
         foreach (var file in request.Files)
         {
             var filePath = HandleRawPath(file);
-
+            
             await using var readFs = System.IO.File.Open(filePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
             await readFs.CopyToAsync(fs);
             await fs.FlushAsync();

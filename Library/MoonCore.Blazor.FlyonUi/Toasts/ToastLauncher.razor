@@ -12,7 +12,9 @@
                     <div class="flex items-center">
                         @{
                             __builder.OpenComponent(0, item.ComponentType);
-                            __builder.AddComponentReferenceCapture(1, o =>
+                            __builder.AddComponentParameter(1, "Launcher", this);
+                            __builder.AddComponentParameter(2, "Reference", item);
+                            __builder.AddComponentReferenceCapture(3, o =>
                             {
                                 item.Component = (BaseToast)o;
                                 item.ConfigureAction?.Invoke();

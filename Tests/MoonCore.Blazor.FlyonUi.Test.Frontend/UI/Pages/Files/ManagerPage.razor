@@ -10,7 +10,7 @@
 <NavTabs Index="1" Names="UiConstants.FilesNames" Links="UiConstants.FilesLinks" />
 
 <div class="mt-5">
-    <FileManager FsAccess="FsAccess" OnConfigure="OnConfigure" EnableUpload="true" />
+    <FileManager FsAccess="FsAccess" OnConfigure="OnConfigure" />
 </div>
 
 @code
@@ -27,6 +27,7 @@
         options.AddMultiOperation<DeleteOperation>();
         options.AddMultiOperation<MoveOperation>();
         options.AddMultiOperation<DownloadOperation>();
+        options.AddToolbarOperation<UploadOperation>();
         
         options.AddSingleOperation<RenameOperation>();
         

@@ -1,40 +1,58 @@
-@using MoonCore.Blazor.FlyonUi.Test.Frontend.UI.Pages.Components
+@using Microsoft.JSInterop
 @using MoonCore.Blazor.FlyonUi.Toasts
 @using MoonCore.Helpers
 
 @inject IJSRuntime JsRuntime
 @inject ToastService ToastService
 
-<label id="fu" for="fd"
+<label id="@DropzoneId" for="@InputId"
        class="bg-base-200/60 rounded-box flex flex-col justify-center border-2 border-base-content/20 border-dashed">
     <div class="text-center cursor-pointer p-12 text-base-content/80">
         <p>
             <i class="icon-hard-drive-upload text-5xl"></i>
         </p>
         <p class="mt-3 text-sm">
-            Choose a file with a size up to 1GB. <br/>
+            Choose a file with a size up to @Formatter.FormatSize(MaxSize). <br/>
             Drop files & folders or <span class="link link-primary">browse your files</span>
         </p>
     </div>
 </label>
 
-<input id="fd" type="file" class="hidden" multiple="multiple"/>
+<input id="@InputId" type="file" class="hidden" multiple="multiple"/>
 
 @code
 {
     [Parameter] public long MaxSize { get; set; } = ByteConverter.FromMegaBytes(25).Bytes;
     [Parameter] public required UploadCallback Callback { get; set; }
+    [Parameter] public Func<Task>? OnStarted { get; set; }
+    [Parameter] public Func<Task>? OnCompleted { get; set; }
 
-    public delegate Task UploadCallback(string path, Stream stream, Func<int, Task> progress);
+    public delegate Task UploadCallback(string path, Stream stream, Func<int, Task> updateProgress);
 
     private ToastReference<UploadToast>? ToastReference;
 
+    private string DropzoneId;
+    private string InputId;
+
+    /// <inheritdoc />
+    protected override void OnInitialized()
+    {
+        DropzoneId = $"uz-dropzone-{GetHashCode()}";
+        InputId = $"uz-input-{GetHashCode()}";
+    }
+
+    /// <inheritdoc />
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (!firstRender)
             return;
 
-        await JsRuntime.InvokeVoidAsync("moonCoreFileUpload.init", "fu", "fd", DotNetObjectReference.Create(this));
+        await JsRuntime.InvokeVoidAsync(
+            "moonCore.fileUpload.init",
+            DropzoneId,
+            InputId,
+            DotNetObjectReference.Create(this)
+        );
     }
 
     [JSInvokable("Start")]
@@ -45,6 +63,9 @@
             toast.Title = $"Uploading {name}";
             toast.Text = "-";
         }, hideDelayMs: -1);
+        
+        if (OnStarted != null)
+            await OnStarted.Invoke();
     }
 
     [JSInvokable("Handle")]
@@ -88,5 +109,8 @@
         ToastReference = null;
 
         await ToastService.SuccessAsync("Upload completed");
+        
+        if (OnCompleted != null)
+            await OnCompleted.Invoke();
     }
 }
