@@ -53,18 +53,21 @@
 @code
 {
     /// <summary>
-    /// <see cref="IFsAccess"/> to use for acessing the folder structure in order to allow the user to browse for the move target
+    /// <see cref="IFsAccess"/> to use for accessing the folder structure in order to allow the user to browse for the move target
     /// </summary>
+    [Parameter]
     public IFsAccess FsAccess { get; set; }
     
     /// <summary>
     /// Initial path where the move modal will start from
     /// </summary>
+    [Parameter]
     public string InitialPath { get; set; }
     
     /// <summary>
     /// Callback with the selected path where the move operation should move to
     /// </summary>
+    [Parameter]
     public Func<string, Task> OnSubmit { get; set; }
 
     private string Path;

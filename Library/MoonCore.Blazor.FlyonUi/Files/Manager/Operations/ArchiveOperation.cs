@@ -44,9 +44,9 @@ public class ArchiveOperation : IMultiFsOperation
 
         await ModalService.LaunchAsync<CreateArchiveModal>(modal =>
         {
-            modal.Formats = archiveAccess.ArchiveFormats;
-            
-            modal.OnSubmit = async (name, format) =>
+            modal.Add(x => x.Formats, archiveAccess.ArchiveFormats);
+
+            modal.Add(x => x.OnSubmit, async (name, format) =>
             {
                 await ToastService.ProgressAsync(
                     "Creating archive",
@@ -74,7 +74,7 @@ public class ArchiveOperation : IMultiFsOperation
                         await fileManager.RefreshAsync();
                     }
                 );
-            };
+            });
         });
     }
 }

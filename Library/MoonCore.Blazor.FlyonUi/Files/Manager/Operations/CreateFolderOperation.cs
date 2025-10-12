@@ -28,7 +28,7 @@ public class CreateFolderOperation : IToolbarOperation
     {
         await ModalService.LaunchAsync<CreateDirectoryModal>(modal =>
         {
-            modal.OnSubmit = async name =>
+            modal.Add(x => x.OnSubmit, async name =>
             {
                 await fsAccess.CreateDirectoryAsync(UnixPath.Combine(
                     workingDir,
@@ -36,7 +36,7 @@ public class CreateFolderOperation : IToolbarOperation
                 ));
 
                 await fileManager.RefreshAsync();
-            };
+            });
         });
     }
 }

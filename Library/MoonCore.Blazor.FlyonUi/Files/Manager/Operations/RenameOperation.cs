@@ -34,8 +34,8 @@ public class RenameOperation : ISingleFsOperation
     {
         await ModalService.LaunchAsync<RenameModal>(modal =>
         {
-            modal.OldName = file.Name;
-            modal.OnSubmit = async newName =>
+            modal.Add(x =>x.OldName, file.Name);
+            modal.Add(x => x.OnSubmit, async newName =>
             {
                 await fsAccess.MoveAsync(
                     UnixPath.Combine(workingDir, file.Name),
@@ -44,7 +44,7 @@ public class RenameOperation : ISingleFsOperation
 
                 await ToastService.SuccessAsync("Successfully renamed item");
                 await fileManager.RefreshAsync();
-            };
+            });
         });
     }
 }

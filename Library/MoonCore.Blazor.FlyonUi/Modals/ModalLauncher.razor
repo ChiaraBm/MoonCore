@@ -1,3 +1,4 @@
+@using MoonCore.Blazor.FlyonUi.Common
 @using MoonCore.Helpers
 
 @inject ModalService ModalService
@@ -21,14 +22,18 @@
             <div class="modal-dialog overlay-open:opacity-100 overlay-open:duration-50 @modal.Size">
                 <div class="modal-content overflow-y-auto">
                     @{
-                        __builder.OpenComponent(0, modal.ComponentType);
-                        __builder.AddComponentParameter(1, "Launcher", this);
-                        __builder.AddComponentParameter(2, "Reference", modal);
-                        __builder.AddComponentReferenceCapture(3, o =>
+                        var seqCounter = 0;
+                        
+                        __builder.OpenComponent(seqCounter++, modal.ComponentType);
+
+                        foreach (var option in modal.Options)
+                            __builder.AddComponentParameter(seqCounter++, option.Key, option.Value);
+                        
+                        __builder.AddComponentReferenceCapture(seqCounter, o =>
                         {
-                            modal.Component = (BaseModal)o;
-                            modal.ConfigureAction?.Invoke();
+                            modal.ComponentReference = o;
                         });
+                        
                         __builder.CloseComponent();
                     }
                 </div>
@@ -59,14 +64,23 @@
     /// <param name="allowUnfocusHide"><b>Optional:</b>  Toggles if clicking outside the modal (onto the backdrop) will hide the modal</param>
     /// <typeparam name="T">Type of the component</typeparam>
     /// <returns>ModalItem to close the modal using <see cref="CloseAsync"/></returns>
-    public async Task<ModalReference<T>> LaunchAsync<T>(Action<T>? onConfigure = null, string size = "max-w-lg", bool allowUnfocusHide = false) where T : BaseModal
+    public async Task<ModalReference<T>> LaunchAsync<T>(Action<ComponentOptions<T>>? onConfigure = null, string size = "max-w-lg", bool allowUnfocusHide = false) where T : BaseModal
     {
-        var item = new ModalReference<T>(typeof(T), onConfigure)
+        var item = new ModalReference<T>()
         {
             Size = size,
-            AllowUnfocusHide = allowUnfocusHide
+            AllowUnfocusHide = allowUnfocusHide,
+            ComponentType = typeof(T)
         };
 
+        var options = new ComponentOptions<T>();
+        onConfigure?.Invoke(options);
+        
+        options.Add(nameof(BaseModal.Reference), item);
+        options.Add(nameof(BaseModal.Launcher), this);
+
+        item.Options = options;
+        
         Modals.Add(item);
         await InvokeAsync(StateHasChanged);
 

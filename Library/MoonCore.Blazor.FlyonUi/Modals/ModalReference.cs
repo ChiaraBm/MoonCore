@@ -1,18 +1,12 @@
+using MoonCore.Blazor.FlyonUi.Common;
+
 namespace MoonCore.Blazor.FlyonUi.Modals;
 
-public class ModalReference<T> : ModalReference where T : BaseModal
+public sealed class ModalReference<T> : ModalReference where T : BaseModal
 {
-    public ModalReference(Type componentType, Action<T>? configureAction)
-    {
-        ComponentType = componentType;
-
-        if (configureAction != null)
-            ConfigureAction = () => configureAction.Invoke(Instance);
-    }
-    
     public T Instance { get; set; }
 
-    internal override BaseModal Component
+    internal override object ComponentReference
     {
         get => Instance;
         set => Instance = (T)value;
@@ -31,7 +25,7 @@ public abstract class ModalReference
     /// </summary>
     public bool AllowUnfocusHide { get; set; }
     
+    internal ComponentOptions Options { get; set; }
     internal Type ComponentType { get; set; }
-    internal abstract BaseModal Component { get; set; }
-    internal Action? ConfigureAction { get; set; }
+    internal abstract object ComponentReference { get; set; }
 }

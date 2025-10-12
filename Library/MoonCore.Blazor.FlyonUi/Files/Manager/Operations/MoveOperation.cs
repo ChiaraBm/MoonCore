@@ -33,9 +33,9 @@ public class MoveOperation : IMultiFsOperation
     {
         await ModalService.LaunchAsync<MoveModal>(modal =>
         {
-            modal.FsAccess = fsAccess;
-            modal.InitialPath = workingDir;
-            modal.OnSubmit = async path =>
+            modal.Add(x => x.FsAccess, fsAccess);
+            modal.Add(x => x.InitialPath, workingDir);
+            modal.Add(x => x.OnSubmit, async path =>
             {
                 await ToastService.ProgressAsync(
                     $"Moving {files.Length} items",
@@ -70,7 +70,7 @@ public class MoveOperation : IMultiFsOperation
                         await fileManager.RefreshAsync();
                     }
                 );
-            };
+            });
         }, "max-w-xl");
     }
 }

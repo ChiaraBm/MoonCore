@@ -11,25 +11,25 @@
     {
         await ModalService.LaunchAsync<MultiLayerModal>(layer1 =>
         {
-            layer1.Text = "Layer 1";
-            layer1.FillerCount = 1;
-            layer1.HandleNext = async () =>
+            layer1.Add(x => x.Text, "Layer 1");
+            layer1.Add(x => x.FillerCount, 1);
+            layer1.Add(x => x.HandleNext, async () =>
             {
                 await ModalService.LaunchAsync<MultiLayerModal>(layer2 =>
                 {
-                    layer2.Text = "Layer 2";
-                    layer2.FillerCount = 2;
-                    layer2.HandleNext = async () =>
+                    layer2.Add(x => x.Text, "Layer 1");
+                    layer2.Add(x => x.FillerCount, 1);
+                    layer2.Add(x => x.HandleNext, async () =>
                     {
                         await ModalService.LaunchAsync<MultiLayerModal>(layer3 =>
                         {
-                            layer3.Text = "Layer 3";
-                            layer3.FillerCount = 3;
-                            layer3.HandleNext = null;
+                            layer3.Add(x => x.Text, "Layer 3");
+                            layer3.Add(x => x.FillerCount, 3);
+                            layer3.Add(x => x.HandleNext, null);
                         }, allowUnfocusHide: true);
-                    };
+                    });
                 }, allowUnfocusHide: true);
-            };
+            });
         }, allowUnfocusHide: true);
     }
 }

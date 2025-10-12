@@ -1,3 +1,5 @@
+using MoonCore.Blazor.FlyonUi.Common;
+
 namespace MoonCore.Blazor.FlyonUi.Modals;
 
 public class ModalService
@@ -14,7 +16,7 @@ public class ModalService
     /// <param name="allowUnfocusHide"><b>Optional:</b>  Toggles if clicking outside the modal (onto the backdrop) will hide the modal</param>
     /// <typeparam name="T">Type of the component</typeparam>
     /// <returns>ModalItem to close the modal using <see cref="CloseAsync"/></returns>
-    public Task<ModalReference<T>> LaunchAsync<T>(Action<T>? onConfigure = null, string size = "max-w-lg", bool allowUnfocusHide = false) where T : BaseModal
+    public Task<ModalReference<T>> LaunchAsync<T>(Action<ComponentOptions<T>>? onConfigure = null, string size = "max-w-lg", bool allowUnfocusHide = false) where T : BaseModal
         => ModalLauncher.LaunchAsync(onConfigure, size, allowUnfocusHide);
 
     /// <summary>

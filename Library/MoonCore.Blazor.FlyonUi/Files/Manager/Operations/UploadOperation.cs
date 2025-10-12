@@ -37,13 +37,16 @@ public class UploadOperation : IToolbarOperation
     {
         await ModalService.LaunchAsync<UploadModal>(modal =>
         {
-            modal.MaxSize = access is ICombineAccess
-                ? fileManager.Options.UploadLimit
-                : fileManager.Options.WriteLimit;
+            modal.Add(
+                x => x.MaxSize,
+                access is ICombineAccess
+                    ? fileManager.Options.UploadLimit
+                    : fileManager.Options.WriteLimit
+            );
 
-            modal.OnCompleted = async () => { await fileManager.RefreshAsync(silent: true); };
+            modal.Add(x => x.OnCompleted, async () => { await fileManager.RefreshAsync(silent: true); });
 
-            modal.Callback = async (string path, Stream stream, Func<int, Task> onProgress) =>
+            modal.Add(x => x.Callback, async (path, stream, onProgress) =>
             {
                 var destination = UnixPath.Combine(workingDir, path);
 
@@ -82,7 +85,7 @@ public class UploadOperation : IToolbarOperation
                     await combineAccess.CombineAsync(destination, paths.ToArray());
                     await access.DeleteAsync(uploadTmpFolder);
                 }
-            };
+            });
         });
     }
 }
