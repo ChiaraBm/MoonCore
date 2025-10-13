@@ -17,8 +17,8 @@
             {
                 await ModalService.LaunchAsync<MultiLayerModal>(layer2 =>
                 {
-                    layer2.Add(x => x.Text, "Layer 1");
-                    layer2.Add(x => x.FillerCount, 1);
+                    layer2.Add(x => x.Text, "Layer 2");
+                    layer2.Add(x => x.FillerCount, 2);
                     layer2.Add(x => x.HandleNext, async () =>
                     {
                         await ModalService.LaunchAsync<MultiLayerModal>(layer3 =>
