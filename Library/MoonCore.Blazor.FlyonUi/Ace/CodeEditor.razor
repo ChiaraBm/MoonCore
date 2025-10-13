@@ -32,16 +32,17 @@
     
     private string EditorId;
     private CodeEditorOptions Options;
-    private bool IsInitialized = false;
+    private bool IsInitialized;
 
+    /// <inheritdoc />
     protected override void OnInitialized()
     {
         EditorId = "editor" + GetHashCode();
         
         Options = new()
         {
-            Mode = "ace/mode/csharp",
-            Theme = "ace/theme/mooncore",
+            Mode = "ace/mode/text",
+            Theme = "ace/theme/cloud_editor_dark",
             FontSize = 14
         };
 
@@ -49,6 +50,7 @@
             OnConfigure.Invoke(Options);
     }
 
+    /// <inheritdoc />
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if(!firstRender)
@@ -67,6 +69,7 @@
         return await CodeEditorService.GetValueAsync(EditorId);
     }
 
+    /// <inheritdoc />
     public async ValueTask DisposeAsync()
     {
         if(!IsInitialized)
