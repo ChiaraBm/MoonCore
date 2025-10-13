@@ -78,8 +78,8 @@
     {
         ToastReference = await ToastService.LaunchAsync<UploadToast>(toast =>
         {
-            toast.Title = $"Uploading {name}";
-            toast.Text = "-";
+            toast.Add(x => x.Title, $"Uploading {name}");
+            toast.Add(x => x.Text, "-");
         }, hideDelayMs: -1);
         
         if (OnStarted != null)

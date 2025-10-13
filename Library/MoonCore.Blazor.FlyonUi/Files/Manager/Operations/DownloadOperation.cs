@@ -44,7 +44,7 @@ public class DownloadOperation : IMultiFsOperation
 
         await ToastService.LaunchAsync<FileDownloadToast>(toastRef =>
         {
-            toastRef.Callback = async (toast) =>
+            toastRef.Add(x => x.Callback, async toast =>
             {
                 var failed = 0;
                 var succeeded = 0;
@@ -89,7 +89,7 @@ public class DownloadOperation : IMultiFsOperation
                     "File downloads started",
                     $"Successful: {succeeded} - Failed: {failed}"
                 );
-            };
+            });
         });
     }
 }

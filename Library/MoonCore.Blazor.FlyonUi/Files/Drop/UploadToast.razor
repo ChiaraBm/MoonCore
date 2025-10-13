@@ -1,4 +1,4 @@
-﻿@inherits MoonCore.Blazor.FlyonUi.Toasts.Components.BaseToast
+﻿@inherits MoonCore.Blazor.FlyonUi.Toasts.BaseToast
 
 <div class="flex flex-col w-full pt-0.5">
     <p class="text-sm font-medium text-base-content">
@@ -17,11 +17,13 @@
     /// <summary>
     /// Title of the toast
     /// </summary>
+    [Parameter]
     public string Title { get; set; }
     
     /// <summary>
     /// Content of the toast
     /// </summary>
+    [Parameter]
     public string Text { get; set; }
 
     private int Percent;

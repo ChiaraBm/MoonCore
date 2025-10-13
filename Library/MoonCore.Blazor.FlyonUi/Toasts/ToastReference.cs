@@ -1,29 +1,31 @@
-using MoonCore.Blazor.FlyonUi.Toasts.Components;
+using MoonCore.Blazor.FlyonUi.Common;
 
 namespace MoonCore.Blazor.FlyonUi.Toasts;
 
+/// <summary>
+/// Represents a reference to a specific active toast of a specific type of toast component
+/// </summary>
+/// <typeparam name="T">Type of the toast component</typeparam>
 public class ToastReference<T> : ToastReference where T : BaseToast
 {
-    public ToastReference(Type componentType, Action<T>? configureAction)
-    {
-        ComponentType = componentType;
-
-        if (configureAction != null)
-            ConfigureAction = () => configureAction.Invoke(Instance);
-    }
-    
+    /// <summary>
+    /// Current instance of the rendered component
+    /// </summary>
     public T Instance { get; set; }
 
-    internal override BaseToast Component
+    internal override object ComponentReference
     {
         get => Instance;
         set => Instance = (T)value;
     }
 }
 
+/// <summary>
+/// Type unspecific reference to an active toast
+/// </summary>
 public abstract class ToastReference
 {
+    internal ComponentOptions Options { get; set; }
     internal Type ComponentType { get; set; }
-    internal abstract BaseToast Component { get; set; }
-    internal Action? ConfigureAction { get; set; }
+    internal abstract object ComponentReference { get; set; }
 }
