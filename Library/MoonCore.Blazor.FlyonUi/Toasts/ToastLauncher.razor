@@ -1,4 +1,4 @@
-@using MoonCore.Blazor.FlyonUi.Toasts.Components
+@using MoonCore.Blazor.FlyonUi.Common
 @using MoonCore.Helpers
 
 @inject ToastService ToastService
@@ -11,14 +11,18 @@
                 <div class="p-4">
                     <div class="flex items-center">
                         @{
-                            __builder.OpenComponent(0, item.ComponentType);
-                            __builder.AddComponentParameter(1, "Launcher", this);
-                            __builder.AddComponentParameter(2, "Reference", item);
-                            __builder.AddComponentReferenceCapture(3, o =>
+                            var seqCounter = 0;
+                        
+                            __builder.OpenComponent(seqCounter++, item.ComponentType);
+
+                            foreach (var option in item.Options)
+                                __builder.AddComponentParameter(seqCounter++, option.Key, option.Value);
+                        
+                            __builder.AddComponentReferenceCapture(seqCounter, o =>
                             {
-                                item.Component = (BaseToast)o;
-                                item.ConfigureAction?.Invoke();
+                                item.ComponentReference = o;
                             });
+                        
                             __builder.CloseComponent();
                         }
                     </div>
@@ -44,9 +48,20 @@
     /// <param name="hideDelayMs">Time in milliseconds until the modal should hide again. Use <b>-1</b> to disable this. Default: <b>5s</b></param>
     /// <typeparam name="T">Type of the component</typeparam>
     /// <returns>Reference item to close the toast using <see cref="CloseAsync"/></returns>
-    public async Task<ToastReference<T>> LaunchAsync<T>(Action<T>? onConfigure = null, int hideDelayMs = 5000) where T : BaseToast
+    public async Task<ToastReference<T>> LaunchAsync<T>(Action<ComponentOptions<T>>? onConfigure = null, int hideDelayMs = 5000) where T : BaseToast
     {
-        var item = new ToastReference<T>(typeof(T), onConfigure);
+        var item = new ToastReference<T>()
+        {
+            ComponentType = typeof(T)
+        };
+        
+        var options = new ComponentOptions<T>();
+        onConfigure?.Invoke(options);
+        
+        options.Add(nameof(BaseToast.Reference), item);
+        options.Add(nameof(BaseToast.Launcher), this);
+
+        item.Options = options;
 
         if (hideDelayMs > 0)
         {

@@ -1,6 +1,4 @@
-@using MoonCore.Blazor.FlyonUi.Toasts.Components
-
-@inherits BaseToast
+@inherits MoonCore.Blazor.FlyonUi.Toasts.BaseToast
 
 <div class="flex-shrink-0 flex items-center">
     @switch (CurrentTaskType)
@@ -60,6 +58,7 @@
     /// <summary>
     /// Worker callback which should execute the actual task so the modal can hide when its finished
     /// </summary>
+    /// [Parameter]
     public Func<FileUploadToast, Task> Callback { get; set; }
 
     private TaskType CurrentTaskType = TaskType.Progressing;
