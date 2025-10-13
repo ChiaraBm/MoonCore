@@ -26,10 +26,17 @@
 
 @code
 {
-    [Parameter] public long MaxSize { get; set; }
-    [Parameter] public Func<string, Stream, Func<int, Task>, Task> Callback { get; set; }
-    [Parameter] public Func<Task>? OnStarted { get; set; }
-    [Parameter] public Func<Task>? OnCompleted { get; set; }
+    [Parameter]
+    public long MaxSize { get; set; }
+    
+    [Parameter]
+    public Func<string, Stream, Func<int, Task>, Task> Callback { get; set; }
+    
+    [Parameter]
+    public Func<Task>? OnStarted { get; set; }
+    
+    [Parameter]
+    public Func<Task>? OnCompleted { get; set; }
 
     private bool IsHidden = false;
 

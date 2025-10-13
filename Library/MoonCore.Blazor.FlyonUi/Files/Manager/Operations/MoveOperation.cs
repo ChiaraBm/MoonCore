@@ -24,16 +24,18 @@ public class MoveOperation : IMultiFsOperation
         ToastService = toastService;
     }
 
+    /// <inheritdoc />
     public bool CheckCompatability(IFsAccess access, IFileManager fileManager)
         => true;
 
+    /// <inheritdoc />
     public async Task ExecuteAsync(string workingDir, FsEntry[] files, IFsAccess fsAccess, IFileManager fileManager)
     {
-        await ModalService.LaunchAsync<MoveModal>(parameters =>
+        await ModalService.LaunchAsync<MoveModal>(modal =>
         {
-            parameters["FsAccess"] = fsAccess;
-            parameters["InitialPath"] = workingDir;
-            parameters["OnSubmit"] = async (string path) =>
+            modal.Add(x => x.FsAccess, fsAccess);
+            modal.Add(x => x.InitialPath, workingDir);
+            modal.Add(x => x.OnSubmit, async path =>
             {
                 await ToastService.ProgressAsync(
                     $"Moving {files.Length} items",
@@ -68,7 +70,7 @@ public class MoveOperation : IMultiFsOperation
                         await fileManager.RefreshAsync();
                     }
                 );
-            };
+            });
         }, "max-w-xl");
     }
 }

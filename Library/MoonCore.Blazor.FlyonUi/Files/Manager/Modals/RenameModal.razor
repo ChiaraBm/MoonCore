@@ -38,12 +38,14 @@
     /// <summary>
     /// Specifies the old name the folder/file has before renaming
     /// </summary>
-    [Parameter] public string OldName { get; set; } = "";
+    [Parameter]
+    public string OldName { get; set; } = "";
     
     /// <summary>
     /// Callback with the new name which will be invoked when the user provided the new name
     /// </summary>
-    [Parameter] public required Func<string, Task> OnSubmit { get; set; }
+    [Parameter]
+    public required Func<string, Task> OnSubmit { get; set; }
 
     private FormData Form;
     private HandleForm HandleForm;

@@ -35,28 +35,28 @@ public class UploadOperation : IToolbarOperation
     /// <inheritdoc />
     public async Task ExecuteAsync(string workingDir, IFsAccess access, IFileManager fileManager)
     {
-        await ModalService.LaunchAsync<UploadModal>(parameters =>
+        await ModalService.LaunchAsync<UploadModal>(modal =>
         {
-            parameters["MaxSize"] = access is ICombineAccess
-                ? fileManager.Options.UploadLimit
-                : fileManager.Options.WriteLimit;
+            modal.Add(
+                x => x.MaxSize,
+                access is ICombineAccess
+                    ? fileManager.Options.UploadLimit
+                    : fileManager.Options.WriteLimit
+            );
 
-            parameters["OnCompleted"] = async () =>
-            {
-                await fileManager.RefreshAsync(silent: true);
-            };
+            modal.Add(x => x.OnCompleted, async () => { await fileManager.RefreshAsync(silent: true); });
 
-            parameters["Callback"] = async (string path, Stream stream, Func<int, Task> onProgress) =>
+            modal.Add(x => x.Callback, async (path, stream, onProgress) =>
             {
                 var destination = UnixPath.Combine(workingDir, path);
-                
+
                 if (stream.Length <= fileManager.Options.WriteLimit)
                 {
                     await access.WriteAsync(destination, stream);
                 }
                 else
                 {
-                    if(access is not ICombineAccess combineAccess)
+                    if (access is not ICombineAccess combineAccess)
                         return; // Should never be valid because cause the max size should prevent it
 
                     var uploadId = Random.Shared.Next(0, 10324);
@@ -66,18 +66,18 @@ public class UploadOperation : IToolbarOperation
 
                     var counter = 0;
                     var paths = new List<string>();
-                    
+
                     while (stream.Position < stream.Length)
                     {
                         var subStream = new SubStream(stream, fileManager.Options.WriteLimit);
 
                         var itemPath = UnixPath.Combine(uploadTmpFolder, $"{counter}.bin");
-                        
+
                         await access.WriteAsync(itemPath, subStream);
-                        
+
                         var percent = (int)Math.Round(stream.Position / (float)stream.Length * 100f);
                         await onProgress.Invoke(percent);
-                        
+
                         paths.Add(itemPath);
                         counter++;
                     }
@@ -85,7 +85,7 @@ public class UploadOperation : IToolbarOperation
                     await combineAccess.CombineAsync(destination, paths.ToArray());
                     await access.DeleteAsync(uploadTmpFolder);
                 }
-            };
+            });
         });
     }
 }

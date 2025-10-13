@@ -18,15 +18,17 @@ public class CreateFolderOperation : IToolbarOperation
     {
         ModalService = modalService;
     }
-    
+
+    /// <inheritdoc />
     public bool CheckCompatability(IFsAccess access, IFileManager fileManager)
         => true;
 
+    /// <inheritdoc />
     public async Task ExecuteAsync(string workingDir, IFsAccess fsAccess, IFileManager fileManager)
     {
-        await ModalService.LaunchAsync<CreateDirectoryModal>(parameters =>
+        await ModalService.LaunchAsync<CreateDirectoryModal>(modal =>
         {
-            parameters.Add("OnSubmit", async (string name) =>
+            modal.Add(x => x.OnSubmit, async name =>
             {
                 await fsAccess.CreateDirectoryAsync(UnixPath.Combine(
                     workingDir,

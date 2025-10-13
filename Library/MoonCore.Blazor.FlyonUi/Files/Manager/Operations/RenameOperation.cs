@@ -18,22 +18,24 @@ public class RenameOperation : ISingleFsOperation
 
     private readonly ToastService ToastService;
     private readonly ModalService ModalService;
-    
-    public bool CheckCompatability(IFsAccess access, IFileManager fileManager)
-        => true;
 
     public RenameOperation(ToastService toastService, ModalService modalService)
     {
         ToastService = toastService;
         ModalService = modalService;
     }
+    
+    /// <inheritdoc />
+    public bool CheckCompatability(IFsAccess access, IFileManager fileManager)
+        => true;
 
+    /// <inheritdoc />
     public async Task ExecuteAsync(string workingDir, FsEntry file, IFsAccess fsAccess, IFileManager fileManager)
     {
-        await ModalService.LaunchAsync<RenameModal>(parameters =>
+        await ModalService.LaunchAsync<RenameModal>(modal =>
         {
-            parameters["OldName"] = file.Name;
-            parameters["OnSubmit"] = async (string newName) =>
+            modal.Add(x =>x.OldName, file.Name);
+            modal.Add(x => x.OnSubmit, async newName =>
             {
                 await fsAccess.MoveAsync(
                     UnixPath.Combine(workingDir, file.Name),
@@ -42,7 +44,7 @@ public class RenameOperation : ISingleFsOperation
 
                 await ToastService.SuccessAsync("Successfully renamed item");
                 await fileManager.RefreshAsync();
-            };
+            });
         });
     }
 }

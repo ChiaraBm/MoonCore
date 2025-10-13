@@ -51,12 +51,14 @@
     /// <summary>
     /// Formats to offer to the user
     /// </summary>
-    [Parameter] public required ArchiveFormat[] Formats { get; set; }
+    [Parameter]
+    public required ArchiveFormat[] Formats { get; set; }
     
     /// <summary>
     /// Callback when the user entered the requested data
     /// </summary>
-    [Parameter] public required Func<string, ArchiveFormat, Task> OnSubmit { get; set; }
+    [Parameter]
+    public required Func<string, ArchiveFormat, Task> OnSubmit { get; set; }
 
     private HandleForm HandleForm;
 

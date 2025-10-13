@@ -22,7 +22,12 @@
 
 @code
 {
-    [Parameter] public Func<Task>? HandleNext { get; set; } = null;
-    [Parameter] public string Text { get; set; }
-    [Parameter] public int FillerCount { get; set; }
+    [Parameter]
+    public Func<Task>? HandleNext { get; set; } = null;
+    
+    [Parameter]
+    public string Text { get; set; }
+    
+    [Parameter]
+    public int FillerCount { get; set; }
 }
