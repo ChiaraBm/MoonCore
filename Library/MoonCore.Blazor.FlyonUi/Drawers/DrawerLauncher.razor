@@ -1,3 +1,4 @@
+@using MoonCore.Blazor.FlyonUi.Common
 @using MoonCore.Helpers
 @inject DrawerService DrawerService
 
@@ -23,7 +24,21 @@
 
         <div class="overlay overlay-open:translate-x-0 drawer @(cssClasses) @(reference.IsVisible ? "open opened" : "")"
              role="dialog" tabindex="-1" style="z-index: @(i + 101)">
-            @reference.RenderFragment
+            @{
+                var seqCounter = 0;
+                        
+                __builder.OpenComponent(seqCounter++, reference.ComponentType);
+
+                foreach (var option in reference.Options)
+                    __builder.AddComponentParameter(seqCounter++, option.Key, option.Value);
+                        
+                __builder.AddComponentReferenceCapture(seqCounter, o =>
+                {
+                    reference.ComponentReference = o;
+                });
+                        
+                __builder.CloseComponent();
+            }
         </div>
     }
 }
@@ -40,31 +55,29 @@
     /// <summary>
     /// Launches a new drawer instance of the specified type
     /// </summary>
-    /// <param name="parameters">Callback for providing parameters to the drawer component</param>
+    /// <param name="onConfigure">Callback for providing parameters to the drawer component</param>
     /// <param name="unfocusHide">Toggles if clicking on the backdrop will close the drawer</param>
     /// <param name="direction">Sets the direction in which the drawer should be opened</param>
     /// <typeparam name="T">Type of the component to launch</typeparam>
     /// <returns>Reference to the drawer instance which can be used for <see cref="CloseAsync"/></returns>
-    public async Task<DrawerReference> LaunchAsync<T>(
-        Action<Dictionary<string, object>>? parameters = null,
+    public async Task<DrawerReference<T>> LaunchAsync<T>(
+        Action<ComponentOptions<T>>? onConfigure = null,
         bool unfocusHide = false,
         DrawerDirection direction = DrawerDirection.Left
     ) where T : DrawerBase
     {
-        var reference = new DrawerReference()
+        var reference = new DrawerReference<T>()
         {
             AllowUnfocusHide = unfocusHide,
             IsVisible = false,
             Direction = direction
         };
+     
+        var options = new ComponentOptions<T>();
+        onConfigure?.Invoke(options);
 
-        reference.RenderFragment = ComponentHelper.FromType<T>(drawerParams =>
-        {
-            drawerParams["Reference"] = reference;
-
-            parameters?.Invoke(drawerParams);
-        });
-
+        reference.Options = options;
+        
         Drawers.Add(reference);
 
         await InvokeAsync(StateHasChanged);
