@@ -1,3 +1,5 @@
+using MoonCore.Blazor.FlyonUi.Common;
+
 namespace MoonCore.Blazor.FlyonUi.Drawers;
 
 /// <summary>
@@ -15,8 +17,8 @@ public class DrawerService
     /// <param name="direction">Sets the direction in which the drawer should be opened</param>
     /// <typeparam name="T">Type of the component to launch</typeparam>
     /// <returns>Reference to the drawer instance which can be used for <see cref="CloseAsync"/></returns>
-    public async Task<DrawerReference> LaunchAsync<T>(
-        Action<Dictionary<string, object>>? parameters = null,
+    public async Task<DrawerReference<T>> LaunchAsync<T>(
+        Action<ComponentOptions<T>>? parameters = null,
         bool unfocusHide = false,
         DrawerDirection direction = DrawerDirection.Left
     ) where T : DrawerBase
