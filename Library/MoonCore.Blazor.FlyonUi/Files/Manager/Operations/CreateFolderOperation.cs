@@ -10,6 +10,7 @@ public class CreateFolderOperation : IToolbarOperation
     public string Name => "Folder";
     public string Icon => "icon-folder";
     public string ToolbarCss => "btn-accent";
+    public string ContextCss => "text-accent";
     public int Order => 0;
 
     private readonly ModalService ModalService;

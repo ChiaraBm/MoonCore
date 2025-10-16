@@ -10,6 +10,11 @@ public interface IToolbarOperation : IFsOperation
     /// Css classes to use for the toolbar button
     /// </summary>
     public string ToolbarCss { get; }
+    
+    /// <summary>
+    /// Css classes to use for the context menu on small viewports
+    /// </summary>
+    public string ContextCss { get; }
 
     /// <summary>
     /// Executes the operation in the specified working directory

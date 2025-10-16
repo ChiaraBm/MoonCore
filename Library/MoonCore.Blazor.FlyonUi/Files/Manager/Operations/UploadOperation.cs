@@ -21,6 +21,9 @@ public class UploadOperation : IToolbarOperation
     /// <inheritdoc />
     public string ToolbarCss => "btn-primary";
 
+    /// <inhertitdoc />
+    public string ContextCss => "text-primary";
+
     private readonly ModalService ModalService;
 
     public UploadOperation(ModalService modalService)

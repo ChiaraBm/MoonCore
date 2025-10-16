@@ -10,6 +10,7 @@ public class CreateFileOperation : IToolbarOperation
     public string Name => "File";
     public string Icon => "icon-file";
     public string ToolbarCss => "btn-accent";
+    public string ContextCss => "text-accent";
     public int Order => 1;
 
     private readonly ModalService ModalService;
