@@ -8,7 +8,7 @@
           OnConfigure="OnConfigure"
           ItemSource="ItemSource">
     <ChildContent>
-        <FileColumn ShowIcons="ShowIcons" UseDynamicIcons="UseDynamicIcons" ShowSize="ShowSize" ShowDate="ShowDate" />
+        <FileColumn ShowIcons="ShowIcons" UseDynamicIcons="UseDynamicIcons" ShowSize="ShowSize" ShowDate="ShowDate" OnClick="OnClick" />
         
         @ChildContent
     </ChildContent>
@@ -98,20 +98,13 @@
         {
             __builder.OpenElement(0, "tr");
 
-            if (OnClick != null)
-            {
-                __builder.AddAttribute(1, "class", "cursor-pointer");
-                __builder.AddAttribute(2, "onclick", EventCallback.Factory.Create(this, () => OnClick.Invoke(entry)));
-                __builder.AddEventPreventDefaultAttribute(3, "onclick", true);
-            }
-
             if (OnContextMenu != null)
             {
-                __builder.AddAttribute(4, "oncontextmenu", EventCallback.Factory.Create(this, (MouseEventArgs args) =>OnContextMenu.Invoke(args, entry)));
-                __builder.AddEventPreventDefaultAttribute(5, "oncontextmenu", true);
+                __builder.AddAttribute(1, "oncontextmenu", EventCallback.Factory.Create(this, (MouseEventArgs args) =>OnContextMenu.Invoke(args, entry)));
+                __builder.AddEventPreventDefaultAttribute(2, "oncontextmenu", true);
             }
             
-            __builder.AddContent(6, fragment);
+            __builder.AddContent(3, fragment);
             
             __builder.CloseElement();
         };

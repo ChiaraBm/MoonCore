@@ -8,23 +8,29 @@
     /// <summary>
     /// Toggles whether to use icons when displaying files and folders. Default: true
     /// </summary>
-    [Parameter] public bool ShowIcons { get; set; } = true;
-    
+    [Parameter]
+    public bool ShowIcons { get; set; } = true;
+
     /// <summary>
     /// Toggles whether to use the <see cref="FileIconHelper"/> when displaying files to determine the best icon. Default: true
     /// </summary>
-    [Parameter] public bool UseDynamicIcons { get; set; } = true;
-    
+    [Parameter]
+    public bool UseDynamicIcons { get; set; } = true;
+
     /// <summary>
     /// Toggles whether to show the modification time of a file. Default: false
     /// </summary>
-    [Parameter] public bool ShowDate { get; set; } = false;
-    
+    [Parameter]
+    public bool ShowDate { get; set; } = false;
+
     /// <summary>
     /// Toggles whether to show the size of a file. Default: false
     /// </summary>
-    [Parameter] public bool ShowSize { get; set; } = false;
-    
+    [Parameter]
+    public bool ShowSize { get; set; } = false;
+
+    [Parameter] public Func<FsEntry, Task>? OnClick { get; set; }
+
     /// <inheritdoc />
     protected internal override void RenderHeader(RenderTreeBuilder __builder)
     {
@@ -34,7 +40,7 @@
                 <div class="me-1"></div>
             </th>
         }
-        
+
         <th>
             <div class="me-1">
                 Name
@@ -73,20 +79,28 @@
                     }
                     else
                     {
-                        string icon;
-
-                        if (UseDynamicIcons)
-                            icon = FileIconHelper.GetByName(item.Name);
-                        else
-                            icon = "icon-file";
+                        var icon = UseDynamicIcons ? FileIconHelper.GetByName(item.Name) : "icon-file";
 
                         <i class="@icon text-warning text-2xl"></i>
                     }
                 </div>
             </td>
         }
-        
-        <td>@item.Name</td>
+
+        <td>
+            @if (OnClick != null)
+            {
+                <a class="cursor-pointer"
+                   @onclick:preventDefault
+                   @onclick="() => OnClick.Invoke(item)">
+                    @item.Name
+                </a>
+            }
+            else
+            {
+                <span>@item.Name</span>
+            }
+        </td>
 
         if (ShowSize)
         {

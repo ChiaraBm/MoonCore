@@ -39,7 +39,7 @@ else
                         {
                             var operation = MultiFsOperations[i];
 
-                            <button @onclick="_ => RunMultiContextOperationAsync(operation)"
+                            <button @onclick="_ => RunSelectionOperationAsync(operation)"
                                     class="btn @(operation.ToolbarCss) @(i != MultiFsOperations.Length - 1 ? "me-2" : "")">
                                 <i class="@operation.Icon"></i>
                                 @operation.Name
@@ -71,26 +71,22 @@ else
                         <Content>
                             @if (SelectedEntries.Count > 0)
                             {
-                                for (var i = 0; i < MultiFsOperations.Length; i++)
+                                foreach (var operation in MultiFsOperations)
                                 {
-                                    var operation = MultiFsOperations[i];
-
-                                    <button @onclick="_ => RunMultiContextOperationAsync(operation)"
+                                    <button @onclick="_ => RunSelectionOperationAsync(operation)"
                                             class="dropdown-item">
-                                        <i class="@operation.Icon"></i>
+                                        <i class="@operation.Icon @operation.ContextCss"></i>
                                         @operation.Name
                                     </button>
                                 }
                             }
                             else
                             {
-                                for (var i = 0; i < ToolbarOperations.Length; i++)
+                                foreach (var operation in ToolbarOperations)
                                 {
-                                    var operation = ToolbarOperations[i];
-
                                     <button @onclick="_ => RunToolbarOperationAsync(operation)"
                                             class="dropdown-item">
-                                        <i class="@operation.Icon"></i>
+                                        <i class="@operation.Icon @operation.ContextCss"></i>
                                         @operation.Name
                                     </button>
                                 }
@@ -152,7 +148,7 @@ else
         foreach (var operation in SingleFsOperations.Where(x => x.Filter == null || x.Filter.Invoke(ContextEntry)))
         {
             <button @onclick="_ => RunSingleContextOperationAsync(operation)" type="button" class="dropdown-item">
-                <i class="@(operation.Icon) @(operation.ContextCss) text-lg me-1"></i>
+                <i class="@(operation.Icon) @(operation.ContextCss)"></i>
                 @operation.Name
             </button>
         }
@@ -160,7 +156,7 @@ else
         foreach (var operation in MultiFsOperations)
         {
             <button @onclick="_ => RunMultiContextOperationAsync(operation)" type="button" class="dropdown-item">
-                <i class="@(operation.Icon) @(operation.ContextCss) text-lg me-1"></i>
+                <i class="@(operation.Icon) @(operation.ContextCss)"></i>
                 @operation.Name
             </button>
         }
