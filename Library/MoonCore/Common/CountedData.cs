@@ -102,32 +102,6 @@ public static class CountedData
     /// <param name="count">Count of items to query per callback</param>
     /// <typeparam name="T">Type of the items to query</typeparam>
     /// <returns>Returns an array of all fetched items</returns>
-    public static async Task<T[]> AllAsync<T>(CountedLoaderAsync<T> callback, int count = 50)
-    {
-        var startIndex = 0;
-        var totalCount = 0;
-        var items = new List<T>();
-
-        do
-        {
-            var data = await callback.Invoke(startIndex, count);
-            
-            items.AddRange(data.Items);
-            totalCount = data.TotalCount;
-
-            startIndex += count;
-        } while (startIndex < totalCount);
-        
-        return items.ToArray();
-    }
-    
-    /// <summary>
-    /// Queries all data using the provided callback
-    /// </summary>
-    /// <param name="callback">Callback to get the data from</param>
-    /// <param name="count">Count of items to query per callback</param>
-    /// <typeparam name="T">Type of the items to query</typeparam>
-    /// <returns>Returns an array of all fetched items</returns>
     public static async ValueTask<T[]> AllAsync<T>(CountedLoaderValueAsync<T> callback, int count = 50)
     {
         var startIndex = 0;
@@ -149,5 +123,4 @@ public static class CountedData
 }
 
 public delegate CountedData<T> CountedLoaderSync<T>(int startIndex, int count);
-public delegate Task<CountedData<T>> CountedLoaderAsync<T>(int startIndex, int count);
 public delegate ValueTask<CountedData<T>> CountedLoaderValueAsync<T>(int startIndex, int count);
