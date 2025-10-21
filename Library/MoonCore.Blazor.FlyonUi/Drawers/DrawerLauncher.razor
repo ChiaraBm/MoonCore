@@ -70,11 +70,15 @@
         {
             AllowUnfocusHide = unfocusHide,
             IsVisible = false,
-            Direction = direction
+            Direction = direction,
+            ComponentType = typeof(T)
         };
      
         var options = new ComponentOptions<T>();
         onConfigure?.Invoke(options);
+        
+        options.Add(nameof(DrawerBase.Reference), reference);
+        options.Add(nameof(DrawerBase.Launcher), this);
 
         reference.Options = options;
         
