@@ -1,0 +1,88 @@
+﻿@page "/themeselector"
+
+@using MoonCore.Blazor.FlyonUi.Components
+@using MoonCore.Blazor.FlyonUi.Interop
+
+@inject ThemeSelectorService ThemeSelectorService
+
+<Dropdown>
+    <Activator>
+        <div class="dropdown-toggle btn btn-primary" aria-haspopup="menu" aria-expanded="false" aria-label="Dropdown">
+            Select theme
+            <span class="icon-chevron-down dropdown-open:rotate-180 size-4"></span>
+        </div>
+    </Activator>
+    <Content>
+        <ul>
+            @foreach (var theme in Themes)
+            {
+                <li>
+                    <a class="dropdown-item"
+                       href="#"
+                       @onclick:preventDefault
+                       @onclick="() => OnSelected(theme)">
+                        @theme
+                    </a>
+                </li>
+            }
+        </ul>
+    </Content>
+</Dropdown>
+
+
+<div class="mt-20">
+    <nav class="tabs overflow-x-auto gap-x-1 p-1" aria-label="Tabs" role="tablist" aria-orientation="horizontal">
+        <button type="button"
+                class="btn btn-text text-base-content/80 active-tab:bg-primary active-tab:text-primary-content hover:text-primary active hover:bg-primary/20"
+                id="tabs-pill-icon-item-1" data-tab="#tabs-pill-icon-1" aria-controls="tabs-pill-icon-1" role="tab"
+                aria-selected="false">
+            <span class="icon-apple"></span>
+            <span class="hidden sm:inline">Home</span>
+        </button>
+        <button type="button"
+                class="btn btn-text text-base-content/80 active-tab:bg-primary active-tab:text-primary-content hover:text-primary hover:bg-primary/20"
+                id="tabs-pill-icon-item-2" data-tab="#tabs-pill-icon-2" aria-controls="tabs-pill-icon-2" role="tab"
+                aria-selected="false">
+            <span class="icon-banana"></span>
+            <span class="hidden sm:inline">Profile</span>
+        </button>
+        <button type="button"
+                class="btn btn-text text-base-content/80 active-tab:bg-primary active-tab:text-primary-content hover:text-primary hover:bg-primary/20"
+                id="tabs-pill-icon-item-3" data-tab="#tabs-pill-icon-3" aria-controls="tabs-pill-icon-3" role="tab"
+                aria-selected="false">
+            <span class="icon-citrus"></span>
+            <span class="hidden sm:inline">Messages</span>
+        </button>
+    </nav>
+
+    <div class="mt-3">
+        <div id="tabs-pill-icon-1" role="tabpanel" aria-labelledby="tabs-pill-icon-item-1">
+            <p class="text-base-content/80">
+                Welcome to the <span class="text-base-content font-semibold">Home tab!</span> Explore the latest updates
+                and news here.
+            </p>
+        </div>
+        <div id="tabs-pill-icon-2" class="hidden" role="tabpanel" aria-labelledby="tabs-pill-icon-item-2">
+            <p class="text-base-content/80">
+                This is your <span class="text-base-content font-semibold">Profile</span> tab, where you can update your
+                personal information and manage your account details.
+            </p>
+        </div>
+        <div id="tabs-pill-icon-3" class="hidden" role="tabpanel" aria-labelledby="tabs-pill-icon-item-3">
+            <p class="text-base-content/80">
+                <span class="text-base-content font-semibold">Messages:</span> View your recent messages, chat with
+                friends, and manage your conversations.
+            </p>
+        </div>
+    </div>
+</div>
+
+@code
+{
+    private readonly string[] Themes = ["moonlight", "sunlight", "spotify", "shadcn", "corporate"];
+
+    private async Task OnSelected(string theme)
+    {
+        await ThemeSelectorService.SetAsync(theme);
+    }
+}

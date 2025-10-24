@@ -1,14 +1,19 @@
 <div class="flex">
-    <nav class="tabs bg-base-200 rounded-field w-fit space-x-1 overflow-x-auto p-1" role="tablist">
+    <nav class="tabs gap-x-1 overflow-x-auto p-1.5 bg-base-100 rounded-field" aria-label="Tabs" role="tablist"
+         aria-orientation="horizontal">
         @for (var i = 0; i < Names.Length; i++)
         {
-            <a href="@(Links[i])" class="btn btn-text text-base-content active-tab:bg-primary active-tab:text-primary-content hover:text-primary active-tab:hover:text-primary-content hover:bg-transparent @(i == Index ? "active" : "")" data-tab="dummy" role="tab" aria-selected="true" >
+            <a href="@(Links[i])"
+               class="btn @Size btn-text text-base-content/80 active-tab:bg-primary active-tab:text-primary-content hover:text-primary hover:bg-primary/20 @(i == Index ? "active" : "")"
+               role="tab"
+               data-tab="dummy">
                 @if (Icons != null)
                 {
                     <i class="@(Icons[i])"></i>
                 }
-                
-                @Names[i]
+                <span class="hidden sm:inline">
+                        @Names[i]
+                    </span>
             </a>
         }
     </nav>
@@ -19,20 +24,30 @@
     /// <summary>
     /// Array of names to select from with the <see cref="Index"/>
     /// </summary>
-    [Parameter] public string[] Names { get; set; } = [];
-    
+    [Parameter]
+    public string[] Names { get; set; } = [];
+
     /// <summary>
     /// Array of links to select from with the <see cref="Index"/>
     /// </summary>
-    [Parameter] public string[] Links { get; set; } = [];
-    
+    [Parameter]
+    public string[] Links { get; set; } = [];
+
     /// <summary>
     /// Array of icons to select from with the <see cref="Index"/>
     /// </summary>
-    [Parameter] public string[]? Icons { get; set; } = null;
-    
+    [Parameter]
+    public string[]? Icons { get; set; } = null;
+
     /// <summary>
     /// Index to select from the arrays
     /// </summary>
-    [Parameter] public int Index { get; set; }
+    [Parameter]
+    public int Index { get; set; }
+
+    /// <summary>
+    /// <b>Optional:</b> Specifies the button size of the nav tab items
+    /// </summary>
+    [Parameter]
+    public string Size { get; set; } = "btn-sm";
 }

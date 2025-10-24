@@ -422,5 +422,10 @@ window.moonCore = {
                 await callbackRef.invokeMethodAsync("Stop");
             });
         }
+    },
+    themeSelector: {
+        set: function (name) {
+            document.getElementsByTagName("html")[0].setAttribute("data-theme", name);
+        }
     }
 }

@@ -16,64 +16,55 @@
         <h3 class="drawer-title text-xl font-semibold">MoonCore</h3>
     </div>
 </div>
-<div class="drawer-body px-2">
-    <ul class="menu menu-sm p-0">
-        @if (Reference == null)
+<div class="drawer-body px-2.5">
+    <ul class="menu menu-sm p-0 bg-transparent">
+        @foreach (var group in Items)
         {
-            foreach (var group in Items)
+            if (!string.IsNullOrEmpty(group.Key))
             {
-                if (!string.IsNullOrEmpty(group.Key))
-                {
-                    <li>
-                        <div class="divider">@group.Key</div>
-                    </li>
-                }
-
-                foreach (var item in group.Value)
-                {
-                    var isActive = item.RequiresExactMatch
-                        ? url.LocalPath == item.Path
-                        : url.LocalPath.StartsWith(item.Path);
-
-                    <li>
-                        <a href="@item.Path" class="@(isActive ? "menu-active" : "")">
-                            <i class="@item.Icon text-lg"></i>
-                            @item.Name
-                        </a>
-                    </li>
-                }
+                <li>
+                    <div class="divider">@group.Key</div>
+                </li>
             }
-        }
-        else
-        {
-            foreach (var group in Items)
+
+            foreach (var item in group.Value)
             {
-                if (!string.IsNullOrEmpty(group.Key))
-                {
-                    <li>
-                        <div class="divider">@group.Key</div>
-                    </li>
-                }
+                var isActive = item.RequiresExactMatch
+                    ? url.LocalPath == item.Path
+                    : url.LocalPath.StartsWith(item.Path);
 
-                foreach (var item in group.Value)
-                {
-                    var isActive = item.RequiresExactMatch
-                        ? url.LocalPath == item.Path
-                        : url.LocalPath.StartsWith(item.Path);
-
-                    <li>
-                        <a href="@item.Path"
-                           class="@(isActive ? "menu-active" : "")"
-                           @onclick="_ => NavigateMobileAsync(item)"
-                           @onclick:preventDefault>
-                            <i class="@item.Icon text-lg"></i>
-                            @item.Name
-                        </a>
-                    </li>
-                }
+                <li>
+                    <a href="@item.Path" class="@(isActive ? "menu-active" : "")">
+                        <i class="@item.Icon text-lg"></i>
+                        @item.Name
+                    </a>
+                </li>
             }
         }
     </ul>
+</div>
+<div class="drawer-footer p-2.5">
+    <div
+        class="flex w-full justify-between items-center px-2 py-2.5 gap-6 rounded-lg text-left text-base/6 font-medium sm:py-2 sm:text-sm/5 text-base-content">
+        <div class="flex min-w-0 items-center gap-3">
+            <span class="inline-grid shrink-0 align-middle">
+                <img class="h-8 rounded-full"
+                     src="/img/pfp_placeholder.png"
+                     alt=""/>
+            </span>
+            <div class="min-w-0">
+                <div class="block truncate text-sm/5 font-medium text-base-content">
+                    @Username
+                </div>
+                <div class="block truncate text-xs/5 font-normal text-base-content/40">
+                    @Email
+                </div>
+            </div>
+        </div>
+        <a href="#" @onclick:preventDefault @onclick="LogoutAsync" class="flex items-center">
+            <i class="icon-log-out text-lg"></i>
+        </a>
+    </div>
 </div>
 
 @code
@@ -128,6 +119,13 @@
                 Path = "/datagrids",
                 Icon = "icon-table-2",
                 RequiresExactMatch = false
+            },
+            new()
+            {
+                Name = "Theme",
+                Path = "/themeselector",
+                Icon = "icon-paint-bucket",
+                RequiresExactMatch = false
             }
         };
 
@@ -154,10 +152,10 @@
         }
     }
 
-    private async Task NavigateMobileAsync(SidebarItem item)
+    private Task LogoutAsync()
     {
-        await CloseAsync();
-        Navigation.NavigateTo(item.Path);
+        Navigation.NavigateTo("/api/auth/logout", true);
+        return Task.CompletedTask;
     }
 
     record SidebarItem
