@@ -2,16 +2,21 @@
     @ChildContent
 </CascadingValue>
 
-<nav class="tabs bg-base-200 rounded-field w-fit space-x-1 overflow-x-auto p-1" role="tablist">
-    
+<nav class="tabs gap-x-1 overflow-x-auto p-1.5 bg-base-100 rounded-lg max-w-fit" aria-label="Tabs" role="tablist" aria-orientation="horizontal">
     @foreach (var tab in TabList)
     {
-        <button @onclick="() => SwitchTabAsync(tab)" type="button" class="btn btn-text text-base-content active-tab:bg-primary active-tab:text-primary-content hover:text-primary active-tab:hover:text-primary-content hover:bg-transparent @(CurrentTab == tab ? "active" : "")" data-tab="dummy" role="tab" aria-selected="true" >
+        <button type="button"
+                class="btn @Size btn-text text-base-content/80 active-tab:bg-primary active-tab:text-primary-content hover:text-primary hover:bg-primary/20 @(CurrentTab == tab ? "active" : "")"
+                role="tab"
+                data-tab="dummy"
+                @onclick="() => SwitchTabAsync(tab)">
             @if (!string.IsNullOrEmpty(tab.Icon))
             {
                 <i class="@tab.Icon"></i>
             }
-            @tab.Name
+            <span class="hidden sm:inline">
+                @tab.Name
+            </span>
         </button>
     }
 </nav>
@@ -29,6 +34,11 @@
     /// Define your <see cref="Tab"/> within here
     /// </summary>
     [Parameter] public RenderFragment ChildContent { get; set; }
+
+    /// <summary>
+    /// <b>Optional:</b> Specifies the button size of the tab items
+    /// </summary>
+    [Parameter] public string Size { get; set; } = "btn-sm";
 
     private readonly List<Tab> TabList = new();
     private Tab? CurrentTab = null;

@@ -1,33 +1,34 @@
-@theme {
-    --mooncore-color-background: oklch(100% 0 0); /* pure white */
-    --mooncore-color-base-100: oklch(98% 0 0);   /* very light base */
-    --mooncore-color-base-150: oklch(97% 0 0);
-    --mooncore-color-base-200: oklch(96% 0 0);
-    --mooncore-color-base-250: oklch(94% 0 0);
-    --mooncore-color-base-300: oklch(92% 0 0);
-    --mooncore-color-base-content: oklch(21% 0.006 285.885); /* dark readable text */
-    --mooncore-color-primary: oklch(45% 0.24 277.023);       /* moderate saturation purple */
-    --mooncore-color-primary-content: oklch(98% 0.01 280);   /* nearly white text */
-    --mooncore-color-secondary: oklch(65% 0.241 354.308);    /* rosy secondary */
-    --mooncore-color-secondary-content: oklch(98% 0.01 0);   /* very light content */
-    --mooncore-color-accent: oklch(77% 0.152 181.912);       /* teal-ish blue */
-    --mooncore-color-accent-content: oklch(20% 0.03 200);    /* darker for contrast */
-    --mooncore-color-neutral: oklch(20% 0.006 285.823);          /* off-white */
-    --mooncore-color-neutral-content: oklch(94% 0.005 285); /* very dark gray-blue */
-    --mooncore-color-info: oklch(74% 0.16 232.661);          /* light blue info */
-    --mooncore-color-info-content: oklch(18% 0.03 240);      /* deep blue content */
-    --mooncore-color-success: oklch(76% 0.177 163.223);      /* light green */
-    --mooncore-color-success-content: oklch(20% 0.05 160);   /* deep green text */
-    --mooncore-color-warning: oklch(82% 0.189 84.429);       /* pale yellow-orange */
-    --mooncore-color-warning-content: oklch(25% 0.08 60);    /* warm dark text */
-    --mooncore-color-error: oklch(71% 0.194 13.428);         /* soft red */
-    --mooncore-color-error-content: oklch(18% 0.08 10);      /* deep red text */
-    --mooncore-radius-selector: 0.5rem;
-    --mooncore-radius-field: 0.25rem;
-    --mooncore-radius-box: 0.5rem;
-    --mooncore-size-selector: 0.25rem;
-    --mooncore-size-field: 0.25rem;
-    --mooncore-border: 1px;
-    --mooncore-depth: 0;
-    --mooncore-noise: 0;
+@plugin "flyonui/theme" {
+    name: "sunlight";
+    prefersdark: false;
+    color-scheme: "light";
+    --color-base-100: oklch(100% 0 0);
+    --color-base-200: oklch(98.462% 0.001 247.838);
+    --color-base-300: oklch(0.898 0.001 286.373);
+
+    --color-base-content: oklch(0.305 0.050 255); /* more saturation for content text */
+    --color-primary: oklch(56.86% 0.255 257.57);
+    --color-primary-content: oklch(98% 0.005 259.822);
+    --color-secondary: oklch(42.551% 0.161 282.339);
+    --color-secondary-content: oklch(98% 0.005 259.822);
+    --color-accent: oklch(59.939% 0.191 335.171);
+    --color-accent-content: oklch(98% 0.005 259.822);
+    --color-neutral: oklch(19.616% 0.063 257.651);
+    --color-neutral-content: oklch(98% 0.005 259.822);
+    --color-info: oklch(.546 .245 262.881);
+    --color-info-content: oklch(98% 0.005 259.822);
+    --color-success: oklch(.627 .194 149.214);
+    --color-success-content: oklch(98% 0.005 259.822);
+    --color-warning: oklch(.828 .189 84.429);
+    --color-warning-content: oklch(98% 0.005 259.822);
+    --color-error: oklch(.586 .253 17.585);
+    --color-error-content: oklch(98% 0.005 259.822);
+    --radius-selector: 1rem;
+    --radius-field: 0.5rem;
+    --radius-box: 1rem;
+    --size-selector: 0.25rem;
+    --size-field: 0.25rem;
+    --border: 1px;
+    --depth: 0;
+    --noise: 0;
 }

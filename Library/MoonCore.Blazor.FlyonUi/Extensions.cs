@@ -4,10 +4,9 @@ using MoonCore.Blazor.FlyonUi.Alerts;
 using MoonCore.Blazor.FlyonUi.BrowserStorage;
 using MoonCore.Blazor.FlyonUi.Drawers;
 using MoonCore.Blazor.FlyonUi.Exceptions;
-using MoonCore.Blazor.FlyonUi.Files;
-using MoonCore.Blazor.FlyonUi.Files.Manager.Abstractions;
 using MoonCore.Blazor.FlyonUi.Files.Manager.Operations;
 using MoonCore.Blazor.FlyonUi.Helpers;
+using MoonCore.Blazor.FlyonUi.Interop;
 using MoonCore.Blazor.FlyonUi.Modals;
 using MoonCore.Blazor.FlyonUi.Toasts;
 
@@ -33,6 +32,7 @@ public static class Extensions
         collection.AddScoped<CookieService>();
         collection.AddScoped<LocalStorageService>();
         collection.AddScoped<DrawerService>();
+        collection.AddScoped<ThemeSelectorService>();
     }
 
     /// <summary>

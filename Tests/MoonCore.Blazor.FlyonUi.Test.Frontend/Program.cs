@@ -4,11 +4,10 @@ using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using MoonCore.Blazor.FlyonUi;
 using MoonCore.Blazor.FlyonUi.Ace;
 using MoonCore.Blazor.FlyonUi.Alerts;
-using MoonCore.Blazor.FlyonUi.Auth;
 using MoonCore.Blazor.FlyonUi.Drawers;
 using MoonCore.Blazor.FlyonUi.Exceptions;
-using MoonCore.Blazor.FlyonUi.Files;
 using MoonCore.Blazor.FlyonUi.Helpers;
+using MoonCore.Blazor.FlyonUi.Interop;
 using MoonCore.Blazor.FlyonUi.Modals;
 using MoonCore.Blazor.FlyonUi.Test.Frontend;
 using MoonCore.Blazor.FlyonUi.Test.Frontend.UI;
@@ -38,6 +37,7 @@ builder.Services.AddScoped<CodeEditorService>();
 builder.Services.AddScoped<DownloadService>();
 builder.Services.AddScoped<GlobalErrorService>();
 builder.Services.AddScoped<DrawerService>();
+builder.Services.AddScoped<ThemeSelectorService>();
 
 builder.Services.AddFileManagerOperations();
 

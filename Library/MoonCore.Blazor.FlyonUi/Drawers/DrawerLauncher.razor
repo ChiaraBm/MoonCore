@@ -1,5 +1,4 @@
 @using MoonCore.Blazor.FlyonUi.Common
-@using MoonCore.Helpers
 @inject DrawerService DrawerService
 
 @if (Drawers.Count > 0)
@@ -18,7 +17,7 @@
         };
 
         <div @onclick="_ => OnBackdropClickAsync(reference)"
-             class="overlay-backdrop transition duration-300 fixed inset-0 bg-base-300/50 overflow-y-auto"
+             class="overlay-backdrop transition duration-300 fixed inset-0 bg-base-300/60 overflow-y-auto"
              style="z-index: @(i + 100)">
         </div>
 

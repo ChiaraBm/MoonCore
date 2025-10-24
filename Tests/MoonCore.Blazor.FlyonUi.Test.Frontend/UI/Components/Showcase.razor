@@ -8,13 +8,27 @@
         <div class="text-lg font-semibold">@Title</div>
         <div class="text-base-content/80">@Description</div>
     </div>
-    
+
     <div>
-        <div class="bg-base-200 rounded-field flex relative p-0.5">
-            <div class="rounded-field bg-base-100 shadow-base-300/20 absolute h-8 w-20 shadow-sm transition-transform duration-300 ease-in-out @(ShowCode ? "translate-x-full" : "translate-x-0")"></div>
-            <button @onclick="() => SetShowCodeAsync(false)" class="rounded-field text-base-content z-1 h-8 w-20">Preview</button>
-            <button @onclick="() => SetShowCodeAsync(true)" class="rounded-field text-base-content z-1 h-8 w-20">Code</button>
-        </div>
+        <nav class="tabs gap-x-1 overflow-x-auto p-1.5 bg-base-100 rounded-lg" aria-label="Tabs" role="tablist" aria-orientation="horizontal">
+            <button type="button"
+                    class="btn btn-sm btn-text text-base-content/80 active-tab:bg-primary active-tab:text-primary-content hover:text-primary hover:bg-primary/20 @(ShowCode ? "" : "active")"
+                    role="tab"
+                    data-tab="dummy"
+                    @onclick="() => SetShowCodeAsync(false)">
+                <i class="icon-square-chart-gantt"></i>
+                <span class="hidden sm:inline">Preview</span>
+            </button>
+            
+            <button type="button"
+                    class="btn btn-sm btn-text text-base-content/80 active-tab:bg-primary active-tab:text-primary-content hover:text-primary hover:bg-primary/20 @(ShowCode ? "active" : "")"
+                    role="tab"
+                    data-tab="dummy"
+                    @onclick="() => SetShowCodeAsync(true)">
+                <i class="icon-square-code"></i>
+                <span class="hidden sm:inline">Code</span>
+            </button>
+        </nav>
     </div>
 </div>
 
@@ -22,7 +36,7 @@
     @if (ShowCode)
     {
         <LazyLoader Load="LoadAsync">
-            <Highlight Content="@Code" />
+            <Highlight Content="@Code"/>
         </LazyLoader>
     }
     else
@@ -40,7 +54,7 @@
 
     private bool ShowCode = false;
     private string Code;
-    
+
     private async Task LoadAsync(LazyLoader _)
     {
         Code = await ApiClient.GetString($"api/showcase/{Source}");
