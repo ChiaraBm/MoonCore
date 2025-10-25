@@ -6,6 +6,7 @@
 @import "./node_modules/flyonui/variants.css";
 @import "./theme.css";
 @import "./theme2.css";
+@import "./theme-moon.css";
 
 @theme {
     --font-inter: "Inter", var(--font-sans);
@@ -15,7 +16,7 @@
 }
 
 @plugin "flyonui" {
-    themes: moonlight, sunlight, spotify, shadcn, corporate;
+    themes: moonlight, sunlight, spotify, shadcn, corporate, yaymoon;
 }
 
 @source "./node_modules/flyonui/dist/index.js";

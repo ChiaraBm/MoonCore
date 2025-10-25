@@ -1,10 +1,12 @@
 @plugin "flyonui/theme" {
-    name: "moonlight";
+    name: "yaymoon";
     prefersdark: true;
     color-scheme: "dark";
-    --color-base-100: #1a2640;
-    --color-base-200: #101a2e;
-    --color-base-300: #0c1221;
+
+    --color-base-100: #11111b;
+    --color-base-200: #080810;
+    --color-base-300: #030306;
+    
     --color-base-content: #dde5f5;
     --color-primary: oklch(.511 .262 276.966);
     --color-primary-content: #dde5f5;
