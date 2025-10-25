@@ -3,9 +3,9 @@
     prefersdark: true;
     color-scheme: "dark";
 
-    --color-base-100: #11111b;
-    --color-base-200: #080810;
-    --color-base-300: #030306;
+    --color-base-100: #2b2b45;
+    --color-base-200: #1d1d31;
+    --color-base-300: #10101e;
     
     --color-base-content: #dde5f5;
     --color-primary: oklch(.511 .262 276.966);
